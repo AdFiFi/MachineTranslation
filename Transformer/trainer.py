@@ -3,6 +3,7 @@ import os
 from timeit import default_timer as timer
 
 from torch.utils.data import DataLoader
+from torchtext.datasets import Multi30k
 
 from model import Transformer, TransformerConfig
 from utils import *
@@ -14,21 +15,21 @@ logger.setLevel(logging.DEBUG)
 class Trainer(object):
     def __init__(self, args):
         self.args = args
-        self.device = args.devive
+        self.device = args.device
         self.model_config = TransformerConfig(enc_vocab_size=args.enc_vocab_size,
                                               dec_vocab_size=args.dec_vocab_size,
-                                              emb_size=args.emb_size,
+                                              d_model=args.d_model,
                                               num_heads=args.num_heads,
                                               dim_feedforward=args.dim_feedforward,
                                               batch_size=args.batch_size,
                                               num_encoder_layers=args.num_encoder_layers,
                                               num_decoder_layers=args.num_decoder_layers,
                                               activation=args.activation)
-        self.model = Transformer(self.model_config).to(args.devive)
+        self.model = Transformer(self.model_config).to(args.device)
         self.loss_fn = torch.nn.CrossEntropyLoss(ignore_index=PAD_IDX)
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=0.0001, betas=(0.9, 0.98), eps=1e-9)
 
-        self.datasets = None
+        self.datasets = Multi30k
 
     def load_datasets(self):
         pass
@@ -37,7 +38,8 @@ class Trainer(object):
         pass
 
     def train_epoch(self):
-        train_iter = self.datasets(split='train', language_pair=(self.args.src_language, self.args.tgt_language))
+        train_iter = self.datasets(root="./data", split='train',
+                                   language_pair=(self.args.src_language, self.args.tgt_language))
         train_dataloader = DataLoader(train_iter, batch_size=self.args.batch_size, collate_fn=self.collate_fn)
         self.model.train()
         losses = 0

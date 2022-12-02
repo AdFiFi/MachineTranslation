@@ -1,6 +1,5 @@
 import torch
-UNK_IDX, PAD_IDX, BOS_IDX, EOS_IDX = 0, 1, 2, 3
-special_symbols = ['<unk>', '<pad>', '<bos>', '<eos>']
+from .tokenizers import PAD_IDX
 
 
 def create_mask(src, tgt, device):
@@ -9,7 +8,7 @@ def create_mask(src, tgt, device):
     return src_padding_mask, tgt_padding_mask
 
 
-class TriangularCausalMask():
+class TriangularCausalMask:
     def __init__(self, B, L, device="cpu"):
         mask_shape = [B, 1, L, L]
         with torch.no_grad():

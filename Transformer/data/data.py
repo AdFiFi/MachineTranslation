@@ -33,7 +33,7 @@ def yield_tokens(data_iter: Iterable, language: str) -> List[str]:
 
 for ln in [SRC_LANGUAGE, TGT_LANGUAGE]:
     # Training data Iterator
-    train_iter = Multi30k(split='train', language_pair=(SRC_LANGUAGE, TGT_LANGUAGE))
+    train_iter = Multi30k(root="/data", split='train', language_pair=(SRC_LANGUAGE, TGT_LANGUAGE))
     # Create torchtext's Vocab object
     vocab_transform[ln] = build_vocab_from_iterator(yield_tokens(train_iter, ln),
                                                     min_freq=1,

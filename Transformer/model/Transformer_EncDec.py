@@ -1,97 +1,113 @@
+import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+from .Attention_Family import FullAttention, AttentionLayer
+from utils import TriangularCausalMask
+
 
 class EncoderLayer(nn.Module):
-    def __init__(self, attention, d_model, dim_feedforward=None, dropout=0.1, activation="relu"):
+    def __init__(self, config):
         super(EncoderLayer, self).__init__()
-        self.attention = attention
-        self.linear1 = nn.Linear(d_model, dim_feedforward)
-        self.linear2 = nn.Linear(dim_feedforward, d_model)
-        self.norm1 = nn.LayerNorm(d_model)
-        self.norm2 = nn.LayerNorm(d_model)
-        self.dropout = nn.Dropout(dropout)
-        self.activation = F.relu if activation == "relu" else F.gelu
+        self.attention = AttentionLayer(
+            FullAttention(attention_dropout=config.dropout, output_attention=config.output_attention),
+            config.d_model, config.num_heads)
+        self.linear1 = nn.Linear(config.d_model, config.dim_feedforward)
+        self.linear2 = nn.Linear(config.dim_feedforward, config.d_model)
+        self.norm1 = nn.LayerNorm(config.d_model)
+        self.norm2 = nn.LayerNorm(config.d_model)
+        self.dropout = nn.Dropout(config.dropout)
+        self.activation = F.relu if config.activation == "relu" else F.gelu
 
-    def forward(self, x, attn_mask=None):
-        new_x, attn = self.attention(
-            x, x, x,
+    def forward(self, hidden_states, attn_mask=None):
+        residual = hidden_states
+        hidden_states, attn = self.attention(
+            hidden_states, hidden_states, hidden_states,
             attn_mask=attn_mask
         )
-        x = x + self.dropout(new_x)
+        hidden_states = residual + self.dropout(hidden_states)
 
-        y = x = self.norm1(x)
-        y = self.dropout(self.activation(self.linear1(y)))
-        y = self.dropout(self.linear2(y))
+        residual = hidden_states = self.norm1(hidden_states)
+        hidden_states = self.dropout(self.activation(self.linear1(hidden_states)))
+        hidden_states = self.dropout(self.linear2(hidden_states))
 
-        return self.norm2(x + y), attn
+        return self.norm2(residual + hidden_states), attn
 
 
 class Encoder(nn.Module):
-    def __init__(self, attn_layers, norm_layer=None):
+    def __init__(self, config):
         super(Encoder, self).__init__()
-        self.attn_layers = nn.ModuleList(attn_layers)
-        self.norm = norm_layer
+        self.attn_layers = nn.ModuleList([EncoderLayer(config) for _ in range(config.num_encoder_layers)])
+        self.norm = torch.nn.LayerNorm(config.d_model)
 
-    def forward(self, x, attn_mask=None):
+    def forward(self, enc_embeds, attn_mask=None):
         # x [B, L, D]
         attns = []
+        encoding = enc_embeds
         for attn_layer in self.attn_layers:
-            x, attn = attn_layer(x, attn_mask=attn_mask)
+            encoding, attn = attn_layer(encoding, attn_mask=attn_mask)
             attns.append(attn)
 
         if self.norm is not None:
-            x = self.norm(x)
+            encoding = self.norm(encoding)
 
-        return x, attns
+        return encoding, attns
 
 
 class DecoderLayer(nn.Module):
-    def __init__(self, self_attention, cross_attention, d_model, dim_feedforward=None,
-                 dropout=0.1, activation="relu"):
+    def __init__(self, config):
         super(DecoderLayer, self).__init__()
-        self.self_attention = self_attention
-        self.cross_attention = cross_attention
-        self.linear1 = nn.Linear(d_model, dim_feedforward)
-        self.linear2 = nn.Linear(dim_feedforward, d_model)
-        self.norm1 = nn.LayerNorm(d_model)
-        self.norm2 = nn.LayerNorm(d_model)
-        self.dropout = nn.Dropout(dropout)
-        self.activation = F.relu if activation == "relu" else F.gelu
+        self.self_attention = AttentionLayer(
+            FullAttention(attention_dropout=config.dropout, output_attention=False),
+            config.d_model, config.num_heads)
+        self.cross_attention = AttentionLayer(
+            FullAttention(attention_dropout=config.dropout, output_attention=False),
+            config.d_model, config.num_heads)
+        self.linear1 = nn.Linear(config.d_model, config.dim_feedforward)
+        self.linear2 = nn.Linear(config.dim_feedforward, config.d_model)
+        self.norm1 = nn.LayerNorm(config.d_model)
+        self.norm2 = nn.LayerNorm(config.d_model)
+        self.dropout = nn.Dropout(config.dropout)
+        self.activation = F.relu if config.activation == "relu" else F.gelu
 
-    def forward(self, x, cross, x_mask=None, cross_mask=None):
-        x = x + self.dropout(self.self_attention(
-            x, x, x,
-            attn_mask=x_mask
-        )[0])
-        x = self.norm1(x)
+    def forward(self, hidden_states, cross, dec_self_mask=None, cross_mask=None):
+        residual = hidden_states
+        hidden_states = residual + self.dropout(self.self_attention(
+            hidden_states, hidden_states, hidden_states,
+            attn_mask=dec_self_mask)[0])
+        residual = hidden_states = self.norm1(hidden_states)
 
-        x = x + self.dropout(self.cross_attention(
-            x, cross, cross,
+        hidden_states = residual + self.dropout(self.cross_attention(
+            hidden_states, cross, cross,
             attn_mask=cross_mask
         )[0])
 
-        y = x = self.norm2(x)
-        y = self.dropout(self.activation(self.linear1(y)))
-        y = self.dropout(self.linear2(y))
+        residual = hidden_states = self.norm2(hidden_states)
+        hidden_states = self.dropout(self.activation(self.linear1(hidden_states)))
+        hidden_states = self.dropout(self.linear2(hidden_states))
 
-        return self.norm3(x + y)
+        return self.norm3(residual + hidden_states)
 
 
 class Decoder(nn.Module):
-    def __init__(self, layers, norm_layer=None, projection=None):
+    def __init__(self, config):
         super(Decoder, self).__init__()
-        self.layers = nn.ModuleList(layers)
-        self.norm = norm_layer
-        self.projection = projection
+        self.layers = nn.ModuleList([DecoderLayer(config) for _ in range(config.num_decoder_layers)])
+        self.norm = torch.nn.LayerNorm(config.d_model)
+        self.projection = nn.Linear(config.d_model, config.dec_vocab_size, bias=True)
 
-    def forward(self, x, cross, x_mask=None, cross_mask=None):
+    def forward(self, dec_embeds, cross, dec_self_mask=None, cross_mask=None):
+        if dec_self_mask is None:
+            B, L, H, E = dec_embeds.shape
+            dec_self_mask = TriangularCausalMask(B, L, device=dec_embeds.device)
+        decoding = dec_embeds
+
         for layer in self.layers:
-            x = layer(x, cross, x_mask=x_mask, cross_mask=cross_mask)
+            decoding = layer(decoding, cross, x_mask=dec_self_mask, cross_mask=cross_mask)
 
         if self.norm is not None:
-            x = self.norm(x)
+            decoding = self.norm(decoding)
 
         if self.projection is not None:
-            x = self.projection(x)
-        return x
+            decoding = self.projection(decoding)
+        return decoding

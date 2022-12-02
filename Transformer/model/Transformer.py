@@ -2,8 +2,8 @@ import torch
 from torch import nn
 
 from .Embed import DataEmbedding
-from .Attention_Family import FullAttention, AttentionLayer
-from .Transformer_EncDec import Encoder, Decoder, EncoderLayer, DecoderLayer
+
+from .Transformer_EncDec import Encoder, Decoder
 
 
 class TransformerConfig:
@@ -29,51 +29,25 @@ class Transformer(nn.Module):
         self.enc_embedding = DataEmbedding(config.enc_vocab_size, config.d_model, config.dropout)
         self.dec_embedding = DataEmbedding(config.dec_vocab_size, config.d_model, config.dropout)
         # Encoder
-        self.encoder = Encoder(
-            [
-                EncoderLayer(
-                    AttentionLayer(
-                        FullAttention(attention_dropout=config.dropout, output_attention=config.output_attention),
-                        config.d_model, config.num_heads),
-                    config.d_model,
-                    config.dim_feedforward,
-                    dropout=config.dropout,
-                    activation=config.activation
-                ) for _ in range(config.num_encoder_layers)
-            ],
-            norm_layer=torch.nn.LayerNorm(config.d_model)
-        )
+        self.encoder = Encoder(config)
         # Decoder
-        self.decoder = Decoder(
-            [
-                DecoderLayer(
-                    AttentionLayer(
-                        FullAttention(attention_dropout=config.dropout, output_attention=False),
-                        config.d_model, config.num_heads),
-                    AttentionLayer(
-                        FullAttention(attention_dropout=config.dropout, output_attention=False),
-                        config.d_model, config.num_heads),
-                    config.d_model,
-                    config.dim_feedforward,
-                    dropout=config.dropout,
-                    activation=config.activation,
-                )
-                for _ in range(config.num_decoder_layers)
-            ],
-            norm_layer=torch.nn.LayerNorm(config.d_model),
-            projection=nn.Linear(config.d_model, config.dec_vocab_size, bias=True)
-        )
+        self.decoder = Decoder(config)
 
-    def forward(self, enc_ids, enc_mark, dec_ids, dec_mark,
+    def forward(self, enc_ids, dec_ids, enc_padding_mask, dec_padding_mask,
                 enc_self_mask=None, dec_self_mask=None, dec_enc_mask=None):
 
-        enc_out = self.enc_embedding(enc_ids, enc_mark)
-        enc_out, attns = self.encoder(enc_out, attn_mask=enc_self_mask)
+        enc_encoding = self.enc_embedding(enc_ids, enc_padding_mask)
+        enc_encoding, attns = self.encoder(enc_encoding, attn_mask=enc_self_mask)
 
-        dec_out = self.dec_embedding(dec_ids, dec_mark)
-        dec_out = self.decoder(dec_out, enc_out, x_mask=dec_self_mask, cross_mask=dec_enc_mask)
+        dec_encoding = self.dec_embedding(dec_ids, dec_padding_mask)
+        dec_out = self.decoder(dec_encoding, enc_encoding, x_mask=dec_self_mask, cross_mask=dec_enc_mask)
 
         if self.output_attention:
             return dec_out, attns
         else:
             return dec_out
+
+    def init_parameters(self):
+        for p in self.parameters():
+            if p.dim() > 1:
+                nn.init.xavier_uniform_(p)

@@ -2,7 +2,6 @@ import torch
 import torch.nn as nn
 import numpy as np
 from math import sqrt
-from utils import TriangularCausalMask
 
 
 class FullAttention(nn.Module):
@@ -19,9 +18,7 @@ class FullAttention(nn.Module):
 
         scores = torch.einsum("blhe,bshe->bhls", queries, keys)
 
-        if attn_mask is None:
-            attn_mask = TriangularCausalMask(B, L, device=queries.device)
-
+        if attn_mask is not None:
             scores.masked_fill_(attn_mask.mask, -np.inf)
 
         A = self.dropout(torch.softmax(scale * scores, dim=-1))

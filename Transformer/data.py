@@ -3,6 +3,8 @@ from torchtext.vocab import build_vocab_from_iterator
 from torchtext.datasets import multi30k, Multi30k
 from typing import Iterable, List
 
+from utils import *
+
 # We need to modify the URLs for the dataset since the links to the original dataset are broken
 # Refer to https://github.com/pytorch/text/issues/1756#issuecomment-1163664163 for more info
 multi30k.URL[

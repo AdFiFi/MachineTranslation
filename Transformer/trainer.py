@@ -1,9 +1,14 @@
-import torch
-from torch.utils.data import DataLoader
+import json
+import os
 from timeit import default_timer as timer
+
+from torch.utils.data import DataLoader
 
 from model import Transformer, TransformerConfig
 from utils import *
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 
 class Trainer(object):
@@ -59,8 +64,8 @@ class Trainer(object):
             train_loss = self.train_epoch()
             end_time = timer()
             val_loss = self.evaluate()
-            logging.info(f"Epoch: {epoch}, Train loss: {train_loss:.3f}, Val loss: {val_loss:.3f}, "
-                         f"Epoch time = {(end_time - start_time):.3f}s")
+            logger.info(f"Epoch: {epoch}, Train loss: {train_loss:.3f}, Val loss: {val_loss:.3f}, "
+                        f"Epoch time = {(end_time - start_time):.3f}s")
 
     def evaluate(self):
         train_iter = self.datasets(split='valid', language_pair=(self.args.src_language, self.args.tgt_language))
@@ -81,8 +86,24 @@ class Trainer(object):
         return losses / len(train_dataloader)
 
     def save_model(self):
-        pass
+        # Save model checkpoint (Overwrite)
+        if not os.path.exists(self.args.model_dir):
+            os.makedirs(self.args.model_dir)
+        model_to_save = self.model.module if self.args.parallel else self.model
+        torch.save(model_to_save, os.path.join(self.args.model_dir, 'model.bin'))
+
+        # Save training arguments together with the trained model
+        args_dict = {k: v for k, v in self.args.__dict__.items()}
+        with open(os.path.join(self.args.model_dir, "config.json"), 'w') as f:
+            f.write(json.dumps(args_dict))
+        logger.info("Saving model checkpoint to %s", self.args.model_dir)
 
     def load_model(self):
-        pass
+        if not os.path.exists(self.args.model_dir):
+            raise Exception("Model doesn't exists! Train first!")
 
+        self.model = torch.load(os.path.join(self.args.model_dir, 'model.bin'))
+        self.model.to(self.device)
+        if self.args.parallel:
+            self.model = torch.nn.DataParallel(self.model)
+        logger.info("***** Model Loaded *****")

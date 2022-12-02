@@ -30,3 +30,4 @@ if __name__ == '__main__':
     model_group.add_argument("--num_decoder_layers", default=3, type=int, help="")
     model_group.add_argument("--activation", default="gelu", type=str, help="")
 
+# model_dir

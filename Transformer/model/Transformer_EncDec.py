@@ -40,12 +40,17 @@ class Encoder(nn.Module):
         self.attn_layers = nn.ModuleList([EncoderLayer(config) for _ in range(config.num_encoder_layers)])
         self.norm = torch.nn.LayerNorm(config.d_model)
 
-    def forward(self, enc_embeds, attn_mask=None):
+    def forward(self, enc_embeds, padding_mask=None, attn_mask=None):
+        if padding_mask is not None:
+            if attn_mask is None:
+                attn_mask = padding_mask
+
         # x [B, L, D]
         attns = []
         encoding = enc_embeds
         for attn_layer in self.attn_layers:
-            encoding, attn = attn_layer(encoding, attn_mask=attn_mask)
+            encoding, attn = attn_layer(encoding,
+                                        attn_mask=attn_mask)
             attns.append(attn)
 
         if self.norm is not None:
@@ -70,11 +75,11 @@ class DecoderLayer(nn.Module):
         self.dropout = nn.Dropout(config.dropout)
         self.activation = F.relu if config.activation == "relu" else F.gelu
 
-    def forward(self, hidden_states, cross, dec_self_mask=None, cross_mask=None):
+    def forward(self, hidden_states, cross, attn_mask=None, cross_mask=None):
         residual = hidden_states
         hidden_states = residual + self.dropout(self.self_attention(
             hidden_states, hidden_states, hidden_states,
-            attn_mask=dec_self_mask)[0])
+            attn_mask=attn_mask)[0])
         residual = hidden_states = self.norm1(hidden_states)
 
         hidden_states = residual + self.dropout(self.cross_attention(
@@ -96,14 +101,16 @@ class Decoder(nn.Module):
         self.norm = torch.nn.LayerNorm(config.d_model)
         self.projection = nn.Linear(config.d_model, config.dec_vocab_size, bias=True)
 
-    def forward(self, dec_embeds, cross, dec_self_mask=None, cross_mask=None):
-        if dec_self_mask is None:
+    def forward(self, dec_embeds, cross, padding_mask=None, attn_mask=None, cross_mask=None):
+        if attn_mask is None:
             B, L, H, E = dec_embeds.shape
-            dec_self_mask = TriangularCausalMask(B, L, device=dec_embeds.device)
+            attn_mask = TriangularCausalMask(B, L, device=dec_embeds.device)
         decoding = dec_embeds
 
         for layer in self.layers:
-            decoding = layer(decoding, cross, x_mask=dec_self_mask, cross_mask=cross_mask)
+            decoding = layer(decoding, cross,
+                             attn_mask=attn_mask,
+                             cross_mask=cross_mask)
 
         if self.norm is not None:
             decoding = self.norm(decoding)

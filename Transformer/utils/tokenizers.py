@@ -71,9 +71,17 @@ class Tokenizers(nn.Module):
     def tokenize(self, sample, language):
         return self.text_transform[language](sample)
 
-    def save_model(self, save_dir):
-        torch.save(self, os.path.join(save_dir, "tokenizer.bin"))
+    # def save_model(self, save_dir):
+    #     if not os.path.exists(save_dir):
+    #         os.makedirs(save_dir)
+    #     torch.save(self, os.path.join(save_dir, "tokenizer.bin"))
 
-    @classmethod
-    def load(cls, save_dir):
-        return torch.load(os.path.join(save_dir, "tokenizer.bin"))
+    # @classmethod
+    # def load(cls, save_dir):
+    #     return torch.load(os.path.join(save_dir, "tokenizer.bin"))
+
+
+if __name__ == '__main__':
+    tok = Tokenizers('de', 'en')
+    tok.build()
+    # tok.save_model('../output_dir')

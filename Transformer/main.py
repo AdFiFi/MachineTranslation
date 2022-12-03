@@ -26,8 +26,6 @@ if __name__ == '__main__':
     data_group.add_argument("--tgt_language", default="en", help="")
 
     model_group = parser.add_argument_group(title="model", description="")
-    model_group.add_argument("--enc_vocab_size", default=0, type=int, help="")
-    model_group.add_argument("--dec_vocab_size", default=0, type=int, help="")
     model_group.add_argument("--d_model", default=512, type=int, help="")
     model_group.add_argument("--num_heads", default=8, type=int, help="")
     model_group.add_argument("--dim_feedforward", default=512, type=int, help="")

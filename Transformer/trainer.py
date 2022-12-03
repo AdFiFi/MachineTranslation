@@ -15,9 +15,12 @@ logger.setLevel(logging.DEBUG)
 class Trainer(object):
     def __init__(self, args):
         self.args = args
-        self.device = args.device
-        self.model_config = TransformerConfig(enc_vocab_size=args.enc_vocab_size,
-                                              dec_vocab_size=args.dec_vocab_size,
+        self.device = 'cuda' if args.device != 'cpu' and torch.cuda.is_available() else args.device
+        self.tokenizer = Tokenizers(args.src_language, args.tgt_language)
+        self.tokenizer.build()
+
+        self.model_config = TransformerConfig(enc_vocab_size=len(self.tokenizer.vocab_transform[args.src_language]),
+                                              dec_vocab_size=len(self.tokenizer.vocab_transform[args.tgt_language]),
                                               d_model=args.d_model,
                                               num_heads=args.num_heads,
                                               dim_feedforward=args.dim_feedforward,
@@ -25,8 +28,7 @@ class Trainer(object):
                                               num_encoder_layers=args.num_encoder_layers,
                                               num_decoder_layers=args.num_decoder_layers,
                                               activation=args.activation)
-        self.tokenizer = Tokenizers(args.src_language, args.tgt_language)
-        self.tokenizer.build()
+
         self.model = Transformer(self.model_config).to(args.device)
 
         self.loss_fn = torch.nn.CrossEntropyLoss(ignore_index=PAD_IDX)

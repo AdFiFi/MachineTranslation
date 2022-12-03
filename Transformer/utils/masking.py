@@ -3,8 +3,8 @@ from .tokenizers import PAD_IDX
 
 
 def create_mask(src, tgt, device):
-    src_padding_mask = (src == PAD_IDX).transpose(0, 1).to(device)
-    tgt_padding_mask = (tgt == PAD_IDX).transpose(0, 1).to(device)
+    src_padding_mask = (src == PAD_IDX).to(device)
+    tgt_padding_mask = (tgt == PAD_IDX).to(device)
     return src_padding_mask, tgt_padding_mask
 
 
@@ -18,3 +18,6 @@ class TriangularCausalMask:
     def mask(self):
         return self._mask
 
+
+class Mask:
+    pass

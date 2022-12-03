@@ -7,8 +7,9 @@ from .Transformer_EncDec import Encoder, Decoder
 
 
 class TransformerConfig:
-    def __init__(self, enc_vocab_size, dec_vocab_size, d_model=512, num_heads=8, dim_feedforward=512, batch_size=128,
-                 num_encoder_layers=3, num_decoder_layers=3, activation='gelu', dropout=0.1, output_attention=False):
+    def __init__(self, enc_vocab_size=20000, dec_vocab_size=20000, d_model=512, num_heads=8, dim_feedforward=512,
+                 batch_size=128, num_encoder_layers=3, num_decoder_layers=3, activation='gelu', dropout=0.1,
+                 output_attention=False):
         self.enc_vocab_size = enc_vocab_size
         self.dec_vocab_size = dec_vocab_size
         self.d_model = d_model
@@ -23,7 +24,7 @@ class TransformerConfig:
 
 
 class Transformer(nn.Module):
-    def __init__(self, config):
+    def __init__(self, config: TransformerConfig):
         super(Transformer, self).__init__()
         self.output_attention = config.output_attention
 
@@ -36,13 +37,18 @@ class Transformer(nn.Module):
         self.decoder = Decoder(config)
 
     def forward(self, enc_ids, dec_ids, enc_padding_mask, dec_padding_mask,
-                enc_self_mask=None, dec_self_mask=None, dec_enc_mask=None):
+                enc_attn_mask=None, dec_attn_mask=None, dec_enc_mask=None):
 
-        enc_encoding = self.enc_embedding(enc_ids, enc_padding_mask)
-        enc_encoding, attns = self.encoder(enc_encoding, attn_mask=enc_self_mask)
+        enc_encoding = self.enc_embedding(enc_ids)
+        enc_encoding, attns = self.encoder(enc_encoding,
+                                           padding_mask=enc_padding_mask,
+                                           attn_mask=enc_attn_mask)
 
-        dec_encoding = self.dec_embedding(dec_ids, dec_padding_mask)
-        dec_out = self.decoder(dec_encoding, enc_encoding, x_mask=dec_self_mask, cross_mask=dec_enc_mask)
+        dec_encoding = self.dec_embedding(dec_ids)
+        dec_out = self.decoder(dec_encoding, enc_encoding,
+                               padding_mask=dec_padding_mask,
+                               attn_mask=dec_attn_mask,
+                               cross_mask=dec_enc_mask)
 
         if self.output_attention:
             return dec_out, attns

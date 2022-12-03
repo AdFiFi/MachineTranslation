@@ -10,6 +10,6 @@ def collate_fn(batch, tokenizer: Tokenizers):
         src_batch.append(tokenizer.tokenize(src_sample.rstrip("\n"), tokenizer.src_language))
         tgt_batch.append(tokenizer.tokenize(tgt_sample.rstrip("\n"), tokenizer.tgt_language))
 
-    src_batch = pad_sequence(src_batch, padding_value=PAD_IDX)
-    tgt_batch = pad_sequence(tgt_batch, padding_value=PAD_IDX)
+    src_batch = pad_sequence(src_batch, batch_first=True, padding_value=PAD_IDX)
+    tgt_batch = pad_sequence(tgt_batch, batch_first=True, padding_value=PAD_IDX)
     return src_batch, tgt_batch

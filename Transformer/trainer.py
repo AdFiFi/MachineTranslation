@@ -25,17 +25,17 @@ class Trainer(object):
                                               num_encoder_layers=args.num_encoder_layers,
                                               num_decoder_layers=args.num_decoder_layers,
                                               activation=args.activation)
+        self.tokenizer = Tokenizers(args.src_language, args.tgt_language)
+        self.tokenizer.build()
         self.model = Transformer(self.model_config).to(args.device)
+
         self.loss_fn = torch.nn.CrossEntropyLoss(ignore_index=PAD_IDX)
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=0.0001, betas=(0.9, 0.98), eps=1e-9)
 
         self.datasets = Multi30k
 
-    def load_datasets(self):
-        pass
-
-    def collate_fn(self):
-        pass
+    def collate_fn(self, x):
+        return collate_fn(x, self.tokenizer)
 
     def train_epoch(self):
         train_iter = self.datasets(root="./data", split='train',

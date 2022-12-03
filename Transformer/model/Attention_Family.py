@@ -19,7 +19,7 @@ class FullAttention(nn.Module):
         scores = torch.einsum("blhe,bshe->bhls", queries, keys)
 
         if attn_mask is not None:
-            scores.masked_fill_(attn_mask.mask, -np.inf)
+            scores.masked_fill_(attn_mask, torch.finfo(scores.dtype).min)
 
         A = self.dropout(torch.softmax(scale * scores, dim=-1))
         V = torch.einsum("bhls,bshd->blhd", A, values)

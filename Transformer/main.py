@@ -32,7 +32,7 @@ if __name__ == '__main__':
     model_group.add_argument("--num_encoder_layers", default=3, type=int, help="")
     model_group.add_argument("--num_decoder_layers", default=3, type=int, help="")
     model_group.add_argument("--activation", default="gelu", type=str, help="")
-    model_group.add_argument("--model_dir", default="result", type=str, help="")
+    model_group.add_argument("--model_dir", default="output_dir", type=str, help="")
 
     train_group = parser.add_argument_group(title="train", description="")
     train_group.add_argument("--device", default="cuda", type=str, help="")
@@ -42,6 +42,7 @@ if __name__ == '__main__':
     train_group.add_argument("--beta2", default=0.98, type=float, help="")
     train_group.add_argument("--epsilon", default=1e-9, type=float, help="")
     train_group.add_argument("--warmup_steps", default=4000, type=float, help="")
+    train_group.add_argument("--parallel", action="store_true", help="")
 
     Args = parser.parse_args()
     main(Args)

@@ -8,16 +8,17 @@ def create_mask(src, tgt, device):
     return src_padding_mask, tgt_padding_mask
 
 
-class TriangularCausalMask:
-    def __init__(self, B, L, device="cpu"):
-        mask_shape = [B, 1, L, L]
-        with torch.no_grad():
-            self._mask = torch.triu(torch.ones(mask_shape, dtype=torch.bool), diagonal=1).to(device)
-
-    @property
-    def mask(self):
-        return self._mask
+def triangular_causal_mask(B, L, device="cpu"):
+    mask_shape = [B, 1, L, L]
+    with torch.no_grad():
+        mask = torch.triu(torch.ones(mask_shape, dtype=torch.bool), diagonal=1).to(device)
+    return mask
 
 
-class Mask:
-    pass
+def mask_expand(mask: torch.Tensor, tgt_len=None):
+    bsz, src_len = mask.size()
+    tgt_len = tgt_len if tgt_len is not None else src_len
+
+    expanded_mask = mask[:, None, None, :].expand(bsz, 1, tgt_len, src_len)
+
+    return expanded_mask

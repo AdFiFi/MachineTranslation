@@ -1,6 +1,7 @@
 import json
 import os
 from timeit import default_timer as timer
+from tqdm import tqdm
 
 from torch.utils.data import DataLoader
 from torchtext.datasets import Multi30k
@@ -30,6 +31,8 @@ class Trainer(object):
                                               activation=args.activation)
 
         self.model = Transformer(self.model_config).to(args.device)
+        if args.parallel:
+            self.model = torch.nn.DataParallel(self.model)
 
         self.loss_fn = torch.nn.CrossEntropyLoss(ignore_index=PAD_IDX)
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=0.0001, betas=(0.9, 0.98), eps=1e-9)
@@ -45,49 +48,57 @@ class Trainer(object):
         train_dataloader = DataLoader(train_iter, batch_size=self.args.batch_size, collate_fn=self.collate_fn)
         self.model.train()
         losses = 0
+        loss_list = []
 
-        for src_ids, tgt_ids in train_dataloader:
+        for src_ids, tgt_ids in tqdm(train_dataloader, desc="Iteration", ncols=0):
             enc_ids = src_ids.to(self.device)
             tgt_ids = tgt_ids.to(self.device)
-            dec_ids = tgt_ids[:-1, :]
+            dec_ids = tgt_ids[:, :-1]
             enc_padding_mask, dec_padding_mask = create_mask(enc_ids, dec_ids, self.device)
             logits = self.model(enc_ids, dec_ids,
                                 enc_padding_mask, dec_padding_mask)
             self.optimizer.zero_grad()
-            tgt_out = tgt_ids[1:, :]
+            tgt_out = tgt_ids[:, 1:]
             loss = self.loss_fn(logits.reshape(-1, logits.shape[-1]), tgt_out.reshape(-1))
             loss.backward()
 
             self.optimizer.step()
             losses += loss.item()
-        return losses / len(train_dataloader)
+            loss_list.append(loss.item())
+            print(f"Train loss: {loss.item():.5f}")
+        return losses / len(loss_list)
 
     def train(self):
-        for epoch in range(1, self.args.num_epochs + 1):
+        for epoch in tqdm(range(1, self.args.num_epochs + 1), desc="epoch"):
             start_time = timer()
             train_loss = self.train_epoch()
             end_time = timer()
+
             val_loss = self.evaluate()
             logger.info(f"Epoch: {epoch}, Train loss: {train_loss:.3f}, Val loss: {val_loss:.3f}, "
                         f"Epoch time = {(end_time - start_time):.3f}s")
+            self.save_model()
 
     def evaluate(self):
-        train_iter = self.datasets(split='valid', language_pair=(self.args.src_language, self.args.tgt_language))
+        train_iter = self.datasets(root="./data", split='valid', language_pair=(self.args.src_language, self.args.tgt_language))
         train_dataloader = DataLoader(train_iter, batch_size=self.args.batch_size, collate_fn=self.collate_fn)
         self.model.eval()
         losses = 0
+        loss_list = []
 
         for src_ids, tgt_ids in train_dataloader:
             enc_ids = src_ids.to(self.device)
             tgt_ids = tgt_ids.to(self.device)
-            dec_ids = tgt_ids[:-1, :]
+            dec_ids = tgt_ids[:, :-1]
             enc_padding_mask, dec_padding_mask = create_mask(enc_ids, dec_ids, self.device)
             logits = self.model(enc_ids, dec_ids,
                                 enc_padding_mask, dec_padding_mask)
-            tgt_out = tgt_ids[1:, :]
+            tgt_out = tgt_ids[:, 1:]
             loss = self.loss_fn(logits.reshape(-1, logits.shape[-1]), tgt_out.reshape(-1))
             losses += loss.item()
-        return losses / len(train_dataloader)
+            loss_list.append(loss.item())
+            print(f"Evaluate loss: {loss.item():.5f}")
+        return losses / len(loss_list)
 
     def save_model(self):
         # Save model checkpoint (Overwrite)

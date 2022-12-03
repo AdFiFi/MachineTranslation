@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from .Attention_Family import FullAttention, AttentionLayer
-from utils import TriangularCausalMask
+from utils import triangular_causal_mask, mask_expand
 
 
 class EncoderLayer(nn.Module):
@@ -43,7 +43,7 @@ class Encoder(nn.Module):
     def forward(self, enc_embeds, padding_mask=None, attn_mask=None):
         if padding_mask is not None:
             if attn_mask is None:
-                attn_mask = padding_mask
+                attn_mask = mask_expand(padding_mask)
 
         # x [B, L, D]
         attns = []
@@ -72,6 +72,7 @@ class DecoderLayer(nn.Module):
         self.linear2 = nn.Linear(config.dim_feedforward, config.d_model)
         self.norm1 = nn.LayerNorm(config.d_model)
         self.norm2 = nn.LayerNorm(config.d_model)
+        self.norm3 = nn.LayerNorm(config.d_model)
         self.dropout = nn.Dropout(config.dropout)
         self.activation = F.relu if config.activation == "relu" else F.gelu
 
@@ -103,8 +104,8 @@ class Decoder(nn.Module):
 
     def forward(self, dec_embeds, cross, padding_mask=None, attn_mask=None, cross_mask=None):
         if attn_mask is None:
-            B, L, H, E = dec_embeds.shape
-            attn_mask = TriangularCausalMask(B, L, device=dec_embeds.device)
+            B, L, _ = dec_embeds.shape
+            attn_mask = triangular_causal_mask(B, L, device=dec_embeds.device)
         decoding = dec_embeds
 
         for layer in self.layers:

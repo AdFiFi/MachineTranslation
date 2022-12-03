@@ -1,2 +1,12 @@
 12/03/2022 00:06:34 - INFO - numexpr.utils -   Note: NumExpr detected 12 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
 12/03/2022 00:06:34 - INFO - numexpr.utils -   NumExpr defaulting to 8 threads.
+12/03/2022 23:28:59 - INFO - numexpr.utils -   Note: NumExpr detected 12 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+12/03/2022 23:28:59 - INFO - numexpr.utils -   NumExpr defaulting to 8 threads.
+12/03/2022 23:33:45 - INFO - numexpr.utils -   Note: NumExpr detected 12 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+12/03/2022 23:33:45 - INFO - numexpr.utils -   NumExpr defaulting to 8 threads.
+12/03/2022 23:33:47 - INFO - trainer -   Epoch: 1, Train loss: 4.862, Val loss: 3.867, Epoch time = 42.866s
+12/03/2022 23:33:47 - INFO - trainer -   Saving model checkpoint to output_dir
+12/03/2022 23:34:31 - INFO - trainer -   Epoch: 2, Train loss: 3.584, Val loss: 3.248, Epoch time = 43.052s
+12/03/2022 23:34:31 - INFO - trainer -   Saving model checkpoint to output_dir
+12/03/2022 23:35:17 - INFO - trainer -   Epoch: 3, Train loss: 3.113, Val loss: 2.923, Epoch time = 45.285s
+12/03/2022 23:35:17 - INFO - trainer -   Saving model checkpoint to output_dir

@@ -39,13 +39,13 @@ class Transformer(nn.Module):
     def forward(self, enc_ids, dec_ids, enc_padding_mask, dec_padding_mask,
                 enc_attn_mask=None, dec_attn_mask=None, dec_enc_mask=None):
 
-        enc_encoding = self.enc_embedding(enc_ids)
-        enc_encoding, attns = self.encoder(enc_encoding,
+        enc_embeds = self.enc_embedding(enc_ids)
+        enc_encoding, attns = self.encoder(enc_embeds,
                                            padding_mask=enc_padding_mask,
                                            attn_mask=enc_attn_mask)
 
-        dec_encoding = self.dec_embedding(dec_ids)
-        dec_out = self.decoder(dec_encoding, enc_encoding,
+        dec_embeds = self.dec_embedding(dec_ids)
+        dec_out = self.decoder(dec_embeds, enc_encoding,
                                padding_mask=dec_padding_mask,
                                attn_mask=dec_attn_mask,
                                cross_mask=dec_enc_mask)

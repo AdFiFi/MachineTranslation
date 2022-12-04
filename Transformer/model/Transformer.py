@@ -8,14 +8,12 @@ from .Transformer_EncDec import Encoder, Decoder
 
 class TransformerConfig:
     def __init__(self, enc_vocab_size=20000, dec_vocab_size=20000, d_model=512, num_heads=8, dim_feedforward=512,
-                 batch_size=128, num_encoder_layers=3, num_decoder_layers=3, activation='gelu', dropout=0.1,
-                 output_attention=False):
+                 num_encoder_layers=3, num_decoder_layers=3, activation='gelu', dropout=0.1, output_attention=False):
         self.enc_vocab_size = enc_vocab_size
         self.dec_vocab_size = dec_vocab_size
         self.d_model = d_model
         self.num_heads = num_heads
         self.dim_feedforward = dim_feedforward
-        self.batch_size = batch_size
         self.num_encoder_layers = num_encoder_layers
         self.num_decoder_layers = num_decoder_layers
         self.activation = activation

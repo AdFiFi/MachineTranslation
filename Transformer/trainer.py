@@ -25,7 +25,6 @@ class Trainer(object):
                                               d_model=args.d_model,
                                               num_heads=args.num_heads,
                                               dim_feedforward=args.dim_feedforward,
-                                              batch_size=args.batch_size,
                                               num_encoder_layers=args.num_encoder_layers,
                                               num_decoder_layers=args.num_decoder_layers,
                                               activation=args.activation)
@@ -35,7 +34,12 @@ class Trainer(object):
             self.model = torch.nn.DataParallel(self.model)
 
         self.loss_fn = torch.nn.CrossEntropyLoss(ignore_index=PAD_IDX)
-        self.optimizer = torch.optim.Adam(self.model.parameters(), lr=0.0001, betas=(0.9, 0.98), eps=1e-9)
+        self.optimizer = torch.optim.Adam(self.model.parameters(),
+                                          lr=args.learning_rate,
+                                          betas=(args.beta1, args.beta2),
+                                          eps=args.epsilon)
+        self.scheduler = get_vanilla_schedule_with_warmup(self.optimizer, d_model=args.d_model,
+                                                          num_warmup_steps=args.warmup_steps)
 
         self.datasets = Multi30k
 
@@ -45,7 +49,7 @@ class Trainer(object):
     def train_epoch(self):
         train_iter = self.datasets(root="./data", split='train',
                                    language_pair=(self.args.src_language, self.args.tgt_language))
-        train_dataloader = DataLoader(train_iter, batch_size=self.args.batch_size, collate_fn=self.collate_fn)
+        train_dataloader = DataLoader(train_iter, batch_size=self.args.train_batch_size, collate_fn=self.collate_fn)
         self.model.train()
         losses = 0
         loss_list = []
@@ -80,8 +84,9 @@ class Trainer(object):
             self.save_model()
 
     def evaluate(self):
-        train_iter = self.datasets(root="./data", split='valid', language_pair=(self.args.src_language, self.args.tgt_language))
-        train_dataloader = DataLoader(train_iter, batch_size=self.args.batch_size, collate_fn=self.collate_fn)
+        train_iter = self.datasets(root="./data", split='valid',
+                                   language_pair=(self.args.src_language, self.args.tgt_language))
+        train_dataloader = DataLoader(train_iter, batch_size=self.args.evaluate_batch_size, collate_fn=self.collate_fn)
         self.model.eval()
         losses = 0
         loss_list = []

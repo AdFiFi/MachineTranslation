@@ -10,3 +10,17 @@
 12/03/2022 23:34:31 - INFO - trainer -   Saving model checkpoint to output_dir
 12/03/2022 23:35:17 - INFO - trainer -   Epoch: 3, Train loss: 3.113, Val loss: 2.923, Epoch time = 45.285s
 12/03/2022 23:35:17 - INFO - trainer -   Saving model checkpoint to output_dir
+12/03/2022 23:36:05 - INFO - trainer -   Epoch: 4, Train loss: 2.811, Val loss: 2.724, Epoch time = 47.046s
+12/03/2022 23:36:05 - INFO - trainer -   Saving model checkpoint to output_dir
+12/03/2022 23:36:52 - INFO - trainer -   Epoch: 5, Train loss: 2.589, Val loss: 2.570, Epoch time = 45.957s
+12/03/2022 23:36:52 - INFO - trainer -   Saving model checkpoint to output_dir
+12/03/2022 23:37:39 - INFO - trainer -   Epoch: 6, Train loss: 2.411, Val loss: 2.459, Epoch time = 45.379s
+12/03/2022 23:37:39 - INFO - trainer -   Saving model checkpoint to output_dir
+12/03/2022 23:38:25 - INFO - trainer -   Epoch: 7, Train loss: 2.262, Val loss: 2.369, Epoch time = 45.165s
+12/03/2022 23:38:25 - INFO - trainer -   Saving model checkpoint to output_dir
+12/03/2022 23:39:11 - INFO - trainer -   Epoch: 8, Train loss: 2.131, Val loss: 2.294, Epoch time = 45.577s
+12/03/2022 23:39:12 - INFO - trainer -   Saving model checkpoint to output_dir
+12/03/2022 23:39:58 - INFO - trainer -   Epoch: 9, Train loss: 2.016, Val loss: 2.244, Epoch time = 45.370s
+12/03/2022 23:39:58 - INFO - trainer -   Saving model checkpoint to output_dir
+12/03/2022 23:40:45 - INFO - trainer -   Epoch: 10, Train loss: 1.912, Val loss: 2.198, Epoch time = 45.776s
+12/03/2022 23:40:45 - INFO - trainer -   Saving model checkpoint to output_dir

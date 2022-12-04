@@ -3,8 +3,8 @@ import os
 from timeit import default_timer as timer
 from tqdm import tqdm
 
-from torch.utils.data import DataLoader
-from torchtext.datasets import Multi30k
+from datasets import load_dataset
+from torch.utils.data import DataLoader, RandomSampler
 
 from model import Transformer, TransformerConfig
 from utils import *
@@ -16,12 +16,13 @@ logger.setLevel(logging.DEBUG)
 class Trainer(object):
     def __init__(self, args):
         self.args = args
+        self.task = f'{args.src_language}-{args.tgt_language}'
         self.device = 'cuda' if args.device != 'cpu' and torch.cuda.is_available() else args.device
-        self.tokenizer = Tokenizers(args.src_language, args.tgt_language)
-        self.tokenizer.build()
+        self.tokenizer = Tokenizer(args.src_language, args.tgt_language).load(os.path.join(args.model_dir, self.task))
 
-        self.model_config = TransformerConfig(enc_vocab_size=len(self.tokenizer.vocab_transform[args.src_language]),
-                                              dec_vocab_size=len(self.tokenizer.vocab_transform[args.tgt_language]),
+        self.model_config = TransformerConfig(enc_vocab_size=self.tokenizer.get_vocab_size(),
+                                              dec_vocab_size=self.tokenizer.get_vocab_size(),
+                                              max_seq_len=args.max_seq_len,
                                               d_model=args.d_model,
                                               num_heads=args.num_heads,
                                               dim_feedforward=args.dim_feedforward,
@@ -38,18 +39,23 @@ class Trainer(object):
                                           lr=args.learning_rate,
                                           betas=(args.beta1, args.beta2),
                                           eps=args.epsilon)
-        # self.scheduler = get_vanilla_schedule_with_warmup(self.optimizer, d_model=args.d_model,
-        #                                                   num_warmup_steps=args.warmup_steps)
+        self.scheduler = get_vanilla_schedule_with_warmup(self.optimizer, d_model=args.d_model,
+                                                          num_warmup_steps=args.warmup_steps)
 
-        self.datasets = Multi30k
+        # self.datasets = Multi30k
+        self.datasets = load_dataset('wmt14', self.task)
 
     def collate_fn(self, x):
-        return collate_fn(x, self.tokenizer)
+        return collate_fn(x, self.tokenizer, self.model_config.max_seq_len)
 
     def train_epoch(self):
-        train_iter = self.datasets(root="./data", split='train',
-                                   language_pair=(self.args.src_language, self.args.tgt_language))
-        train_dataloader = DataLoader(train_iter, batch_size=self.args.train_batch_size, collate_fn=self.collate_fn)
+        train_datasets = self.datasets['train']
+        sampler = RandomSampler(train_datasets)
+        train_dataloader = DataLoader(train_datasets,
+                                      sampler=sampler,
+                                      batch_size=self.args.train_batch_size,
+                                      collate_fn=self.collate_fn,
+                                      num_workers=0)
         self.model.train()
         losses = 0
         loss_list = []
@@ -67,7 +73,7 @@ class Trainer(object):
             loss.backward()
 
             self.optimizer.step()
-            # self.scheduler.step()  # Update learning rate schedule
+            self.scheduler.step()  # Update learning rate schedule
 
             losses += loss.item()
             loss_list.append(loss.item())
@@ -86,14 +92,15 @@ class Trainer(object):
             self.save_model()
 
     def evaluate(self):
-        train_iter = self.datasets(root="./data", split='valid',
-                                   language_pair=(self.args.src_language, self.args.tgt_language))
-        train_dataloader = DataLoader(train_iter, batch_size=self.args.evaluate_batch_size, collate_fn=self.collate_fn)
+        evaluate_datasets = self.datasets['train']
+        evaluate_dataloader = DataLoader(evaluate_datasets,
+                                         batch_size=self.args.evaluate_batch_size,
+                                         collate_fn=self.collate_fn)
         self.model.eval()
         losses = 0
         loss_list = []
 
-        for src_ids, tgt_ids in train_dataloader:
+        for src_ids, tgt_ids in evaluate_dataloader:
             enc_ids = src_ids.to(self.device)
             tgt_ids = tgt_ids.to(self.device)
             dec_ids = tgt_ids[:, :-1]
@@ -109,22 +116,24 @@ class Trainer(object):
 
     def save_model(self):
         # Save model checkpoint (Overwrite)
-        if not os.path.exists(self.args.model_dir):
-            os.makedirs(self.args.model_dir)
+        path = os.path.join(self.args.model_dir, self.task)
+        if not os.path.exists(path):
+            os.makedirs(path)
         model_to_save = self.model.module if self.args.parallel else self.model
-        torch.save(model_to_save, os.path.join(self.args.model_dir, 'model.bin'))
+        torch.save(model_to_save, os.path.join(path, 'model.bin'))
 
         # Save training arguments together with the trained model
         args_dict = {k: v for k, v in self.args.__dict__.items()}
-        with open(os.path.join(self.args.model_dir, "config.json"), 'w') as f:
+        with open(os.path.join(path, "config.json"), 'w') as f:
             f.write(json.dumps(args_dict))
-        logger.info("Saving model checkpoint to %s", self.args.model_dir)
+        logger.info("Saving model checkpoint to %s", path)
 
     def load_model(self):
-        if not os.path.exists(self.args.model_dir):
+        path = os.path.join(self.args.model_dir, self.task)
+        if not os.path.exists(path):
             raise Exception("Model doesn't exists! Train first!")
 
-        self.model = torch.load(os.path.join(self.args.model_dir, 'model.bin'))
+        self.model = torch.load(os.path.join(path, 'model.bin'))
         self.model.to(self.device)
         if self.args.parallel:
             self.model = torch.nn.DataParallel(self.model)

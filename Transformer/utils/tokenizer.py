@@ -3,7 +3,8 @@ from typing import Iterable, List
 
 import torch
 from datasets import load_dataset, Dataset, table
-from tokenizers import CharBPETokenizer, BertWordPieceTokenizer
+from tokenizers import CharBPETokenizer
+from tokenizers.models import BPE
 from torch import nn
 from torchtext.data.utils import get_tokenizer
 from torchtext.datasets import Multi30k
@@ -13,93 +14,41 @@ UNK_IDX, PAD_IDX, BOS_IDX, EOS_IDX = 0, 1, 2, 3
 special_tokens = ['<pad>', '<unk>', '<bos>', '<eos>']
 
 
-class Tokenizers(nn.Module):
-    def __init__(self, src_language, tgt_language):
-        super(Tokenizers, self).__init__()
+class Tokenizer(CharBPETokenizer):
+    def __init__(self, src_language, tgt_language, vocab=None, merges=None, **kwargs):
+        super(Tokenizer, self).__init__(vocab, merges, **kwargs)
         self.src_language = src_language
         self.tgt_language = tgt_language
-        self.language_index = {self.src_language: 0, self.tgt_language: 1}
-        # Place-holders
-        self.token_transform = {}
-        self.vocab_transform = {}
-        self.text_transform = {}
 
-    def forward(self):
-        pass
+    def encode_expand(self, token_ids, max_seq_len):
+        token_ids = self.encode(token_ids).ids
+        token_ids = torch.cat((torch.tensor([BOS_IDX]),
+                               torch.tensor(token_ids[:max_seq_len-2]),
+                               torch.tensor([EOS_IDX])))
+        return token_ids
 
-    def yield_tokens(self, data_iter: Iterable, language: str) -> List[str]:
-        for data_sample in data_iter:
-            yield self.token_transform[language](data_sample[self.language_index[language]])
+    def train_from_datasets(self, dataset, vocab_size, save_path):
+        self.train_from_iterator(iterator=iter(dataset), vocab_size=vocab_size, min_frequency=2,
+                                 special_tokens=special_tokens)
 
-    def build(self):
-        def sequential_transforms(*transforms):
-            # helper function to club together sequential operations
-            def func(txt_input):
-                for transform in transforms:
-                    txt_input = transform(txt_input)
-                return txt_input
+        if not os.path.exists(save_path):
+            os.makedirs(save_path)
+        self.save_model(save_path)
 
-            return func
+    def from_file(self, vocab_filename: str, merges_filename: str, **kwargs):
+        vocab, merges = BPE.read_file(vocab_filename, merges_filename)
+        return Tokenizer(self.src_language, self.tgt_language, vocab, merges, **kwargs)
 
-        self.token_transform[self.src_language] = get_tokenizer('spacy', language='de_core_news_md')
-        self.token_transform[self.tgt_language] = get_tokenizer('spacy', language='en_core_web_md')
-
-        for ln in [self.src_language, self.tgt_language]:
-            # Training data Iterator
-            train_iter = Multi30k(root="/data", split='train', language_pair=(self.src_language, self.tgt_language))
-            # Create torchtext's Vocab object
-            self.vocab_transform[ln] = build_vocab_from_iterator(self.yield_tokens(train_iter, ln),
-                                                                 min_freq=1,
-                                                                 specials=special_tokens,
-                                                                 special_first=True)
-
-        # Set UNK_IDX as the default index. This index is returned when the token is not found.
-        # If not set, it throws RuntimeError when the queried token is not found in the Vocabulary.
-        for ln in [self.src_language, self.tgt_language]:
-            self.vocab_transform[ln].set_default_index(UNK_IDX)
-
-        # src and tgt language text transforms to convert raw strings into tensors indices
-        for ln in [self.src_language, self.tgt_language]:
-            self.text_transform[ln] = sequential_transforms(self.token_transform[ln],  # Tokenization
-                                                            self.vocab_transform[ln],  # Numericalization
-                                                            self.tensor_transform)  # Add BOS/EOS and create tensor
-
-    @staticmethod
-    def tensor_transform(token_ids: List[int]):
-        # function to add BOS/EOS and create tensor for input sequence indices
-        return torch.cat((torch.tensor([BOS_IDX]),
-                          torch.tensor(token_ids),
-                          torch.tensor([EOS_IDX])))
-
-    def tokenize(self, sample, language):
-        return self.text_transform[language](sample)
-
-    # def save_model(self, save_dir):
-    #     if not os.path.exists(save_dir):
-    #         os.makedirs(save_dir)
-    #     torch.save(self, os.path.join(save_dir, "tokenizer.bin"))
-
-    # @classmethod
-    # def load(cls, save_dir):
-    #     return torch.load(os.path.join(save_dir, "tokenizer.bin"))
-
-
-def train_BPE_tokenizer(dataset, vocab_size, save_path):
-    tokenizer = CharBPETokenizer()
-    tokenizer.train_from_iterator(iterator=iter(dataset), vocab_size=vocab_size, min_frequency=2,
-                                  special_tokens=special_tokens)
-
-    # tokenizer.save("./tokenizer.json")
-    if not os.path.exists(save_path):
-        os.makedirs(save_path)
-    tokenizer.save_model(save_path)
-    # token = tokenizer.encode("##")
-    # vocab = tokenizer.get_vocab()
-    # tokenizer.from_file()
-    return tokenizer
+    def load(self, path):
+        vocab_path = os.path.join(path, 'vocab.json')
+        merges_path = os.path.join(path, 'merges.txt')
+        tokenizer = self.from_file(vocab_path, merges_path)
+        tokenizer.add_special_tokens(special_tokens=special_tokens)
+        return tokenizer
 
 
 def train_de_en_tokenizer():
+    tok = Tokenizer('de', 'en')
     data = load_dataset('wmt14', 'de-en')['train']
     de_list = []
     en_list = []
@@ -107,12 +56,12 @@ def train_de_en_tokenizer():
         de_list.append(pair['translation']['de'])
         en_list.append(pair['translation']['en'])
     new_datasets = de_list+en_list
-
-    bpe = train_BPE_tokenizer(new_datasets, vocab_size=37000, save_path='../output_dir/de-en')
-    return bpe
+    tok.train_from_datasets(new_datasets, vocab_size=37000, save_path='../output_dir/de-en')
+    return tok
 
 
 def train_fr_en_tokenizer():
+    tok = Tokenizer('fr', 'en')
     data = load_dataset('wmt14', 'fr-en')['train']
     de_list = []
     en_list = []
@@ -121,14 +70,18 @@ def train_fr_en_tokenizer():
         en_list.append(pair['translation']['en'])
     new_datasets = de_list+en_list
 
-    bpe = train_BPE_tokenizer(new_datasets, vocab_size=37000, save_path='../output_dir/fr-en')
-    return bpe
+    tok.train_from_datasets(new_datasets, vocab_size=37000, save_path='../output_dir/fr-en')
+    return tok
+
+
+
 
 
 if __name__ == '__main__':
     # tok = Tokenizers('de', 'en')
     # tok.build()
     # tok.save_model('../output_dir')
+
     # train_fr_en_tokenizer()
     train_fr_en_tokenizer()
 

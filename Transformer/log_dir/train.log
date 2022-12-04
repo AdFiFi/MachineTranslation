@@ -44,3 +44,14 @@
 12/04/2022 13:50:02 - INFO - trainer -   Saving model checkpoint to output_dir
 12/04/2022 13:51:44 - INFO - trainer -   Epoch: 10, Train loss: 2.996, Val loss: 2.958, Epoch time = 100.403s
 12/04/2022 13:51:44 - INFO - trainer -   Saving model checkpoint to output_dir
+12/04/2022 22:34:46 - WARNING - datasets.builder -   Found cached dataset wmt14 (C:/Users/13987/.cache/huggingface/datasets/wmt14/de-en/1.0.0/2de185b074515e97618524d69f5e27ee7545dcbed4aa9bc1a4235710ffca33f4)
+12/04/2022 22:58:52 - WARNING - datasets.builder -   Found cached dataset wmt14 (C:/Users/13987/.cache/huggingface/datasets/wmt14/de-en/1.0.0/2de185b074515e97618524d69f5e27ee7545dcbed4aa9bc1a4235710ffca33f4)
+12/04/2022 23:17:39 - WARNING - datasets.builder -   Found cached dataset wmt14 (C:/Users/13987/.cache/huggingface/datasets/wmt14/de-en/1.0.0/2de185b074515e97618524d69f5e27ee7545dcbed4aa9bc1a4235710ffca33f4)
+12/04/2022 23:20:23 - WARNING - datasets.builder -   Found cached dataset wmt14 (C:/Users/13987/.cache/huggingface/datasets/wmt14/de-en/1.0.0/2de185b074515e97618524d69f5e27ee7545dcbed4aa9bc1a4235710ffca33f4)
+12/04/2022 23:21:22 - WARNING - datasets.builder -   Found cached dataset wmt14 (C:/Users/13987/.cache/huggingface/datasets/wmt14/de-en/1.0.0/2de185b074515e97618524d69f5e27ee7545dcbed4aa9bc1a4235710ffca33f4)
+12/04/2022 23:23:08 - WARNING - datasets.builder -   Found cached dataset wmt14 (C:/Users/13987/.cache/huggingface/datasets/wmt14/de-en/1.0.0/2de185b074515e97618524d69f5e27ee7545dcbed4aa9bc1a4235710ffca33f4)
+12/04/2022 23:29:09 - WARNING - datasets.builder -   Found cached dataset wmt14 (C:/Users/13987/.cache/huggingface/datasets/wmt14/de-en/1.0.0/2de185b074515e97618524d69f5e27ee7545dcbed4aa9bc1a4235710ffca33f4)
+12/04/2022 23:30:13 - WARNING - datasets.builder -   Found cached dataset wmt14 (C:/Users/13987/.cache/huggingface/datasets/wmt14/de-en/1.0.0/2de185b074515e97618524d69f5e27ee7545dcbed4aa9bc1a4235710ffca33f4)
+12/04/2022 23:31:18 - WARNING - datasets.builder -   Found cached dataset wmt14 (C:/Users/13987/.cache/huggingface/datasets/wmt14/de-en/1.0.0/2de185b074515e97618524d69f5e27ee7545dcbed4aa9bc1a4235710ffca33f4)
+12/04/2022 23:32:14 - WARNING - datasets.builder -   Found cached dataset wmt14 (C:/Users/13987/.cache/huggingface/datasets/wmt14/de-en/1.0.0/2de185b074515e97618524d69f5e27ee7545dcbed4aa9bc1a4235710ffca33f4)
+12/04/2022 23:39:26 - WARNING - datasets.builder -   Found cached dataset wmt14 (C:/Users/13987/.cache/huggingface/datasets/wmt14/de-en/1.0.0/2de185b074515e97618524d69f5e27ee7545dcbed4aa9bc1a4235710ffca33f4)

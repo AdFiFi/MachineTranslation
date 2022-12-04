@@ -32,7 +32,7 @@ if __name__ == '__main__':
     model_group.add_argument("--num_encoder_layers", default=6, type=int, help="")
     model_group.add_argument("--num_decoder_layers", default=6, type=int, help="")
     model_group.add_argument("--activation", default="gelu", type=str, help="")
-    model_group.add_argument("--model_dir", default="output_dir", type=str, help="")
+    model_group.add_argument("--model_dir", default="output_dir/de-en", type=str, help="")
 
     train_group = parser.add_argument_group(title="train", description="")
     train_group.add_argument("--device", default="cuda", type=str, help="")

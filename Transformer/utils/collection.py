@@ -1,6 +1,6 @@
 from torch.nn.utils.rnn import pad_sequence
 
-from .tokenizers import PAD_IDX, Tokenizers
+from .tokenizer import PAD_IDX, Tokenizers
 
 
 # function to collate data samples into batch tesors

@@ -1,5 +1,5 @@
 import torch
-from .tokenizers import PAD_IDX
+from .tokenizer import PAD_IDX
 
 
 def create_mask(src, tgt, device):

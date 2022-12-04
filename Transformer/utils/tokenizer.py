@@ -1,13 +1,16 @@
 import os
-import torch
-from torch import nn
-from torchtext.data.utils import get_tokenizer
-from torchtext.vocab import build_vocab_from_iterator
-from torchtext.datasets import multi30k, Multi30k
 from typing import Iterable, List
 
+import torch
+from datasets import load_dataset, Dataset, table
+from tokenizers import CharBPETokenizer, BertWordPieceTokenizer
+from torch import nn
+from torchtext.data.utils import get_tokenizer
+from torchtext.datasets import Multi30k
+from torchtext.vocab import build_vocab_from_iterator
+
 UNK_IDX, PAD_IDX, BOS_IDX, EOS_IDX = 0, 1, 2, 3
-special_symbols = ['<unk>', '<pad>', '<bos>', '<eos>']
+special_tokens = ['<pad>', '<unk>', '<bos>', '<eos>']
 
 
 class Tokenizers(nn.Module):
@@ -47,7 +50,7 @@ class Tokenizers(nn.Module):
             # Create torchtext's Vocab object
             self.vocab_transform[ln] = build_vocab_from_iterator(self.yield_tokens(train_iter, ln),
                                                                  min_freq=1,
-                                                                 specials=special_symbols,
+                                                                 specials=special_tokens,
                                                                  special_first=True)
 
         # Set UNK_IDX as the default index. This index is returned when the token is not found.
@@ -81,7 +84,51 @@ class Tokenizers(nn.Module):
     #     return torch.load(os.path.join(save_dir, "tokenizer.bin"))
 
 
+def train_BPE_tokenizer(dataset, vocab_size, save_path):
+    tokenizer = CharBPETokenizer()
+    tokenizer.train_from_iterator(iterator=iter(dataset), vocab_size=vocab_size, min_frequency=2,
+                                  special_tokens=special_tokens)
+
+    # tokenizer.save("./tokenizer.json")
+    if not os.path.exists(save_path):
+        os.makedirs(save_path)
+    tokenizer.save_model(save_path)
+    # token = tokenizer.encode("##")
+    # vocab = tokenizer.get_vocab()
+    # tokenizer.from_file()
+    return tokenizer
+
+
+def train_de_en_tokenizer():
+    data = load_dataset('wmt14', 'de-en')['train']
+    de_list = []
+    en_list = []
+    for pair in data:
+        de_list.append(pair['translation']['de'])
+        en_list.append(pair['translation']['en'])
+    new_datasets = de_list+en_list
+
+    bpe = train_BPE_tokenizer(new_datasets, vocab_size=37000, save_path='../output_dir/de-en')
+    return bpe
+
+
+def train_fr_en_tokenizer():
+    data = load_dataset('wmt14', 'fr-en')['train']
+    de_list = []
+    en_list = []
+    for pair in data:
+        de_list.append(pair['translation']['fr'])
+        en_list.append(pair['translation']['en'])
+    new_datasets = de_list+en_list
+
+    bpe = train_BPE_tokenizer(new_datasets, vocab_size=37000, save_path='../output_dir/fr-en')
+    return bpe
+
+
 if __name__ == '__main__':
-    tok = Tokenizers('de', 'en')
-    tok.build()
+    # tok = Tokenizers('de', 'en')
+    # tok.build()
     # tok.save_model('../output_dir')
+    # train_fr_en_tokenizer()
+    train_fr_en_tokenizer()
+

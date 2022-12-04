@@ -24,3 +24,23 @@
 12/03/2022 23:39:58 - INFO - trainer -   Saving model checkpoint to output_dir
 12/03/2022 23:40:45 - INFO - trainer -   Epoch: 10, Train loss: 1.912, Val loss: 2.198, Epoch time = 45.776s
 12/03/2022 23:40:45 - INFO - trainer -   Saving model checkpoint to output_dir
+12/04/2022 13:36:29 - INFO - trainer -   Epoch: 1, Train loss: 5.990, Val loss: 4.905, Epoch time = 96.765s
+12/04/2022 13:36:30 - INFO - trainer -   Saving model checkpoint to output_dir
+12/04/2022 13:38:09 - INFO - trainer -   Epoch: 2, Train loss: 4.547, Val loss: 4.222, Epoch time = 98.418s
+12/04/2022 13:38:10 - INFO - trainer -   Saving model checkpoint to output_dir
+12/04/2022 13:39:50 - INFO - trainer -   Epoch: 3, Train loss: 4.084, Val loss: 3.889, Epoch time = 99.215s
+12/04/2022 13:39:51 - INFO - trainer -   Saving model checkpoint to output_dir
+12/04/2022 13:41:32 - INFO - trainer -   Epoch: 4, Train loss: 3.809, Val loss: 3.657, Epoch time = 99.982s
+12/04/2022 13:41:33 - INFO - trainer -   Saving model checkpoint to output_dir
+12/04/2022 13:43:14 - INFO - trainer -   Epoch: 5, Train loss: 3.605, Val loss: 3.484, Epoch time = 99.900s
+12/04/2022 13:43:14 - INFO - trainer -   Saving model checkpoint to output_dir
+12/04/2022 13:44:56 - INFO - trainer -   Epoch: 6, Train loss: 3.443, Val loss: 3.343, Epoch time = 100.027s
+12/04/2022 13:44:56 - INFO - trainer -   Saving model checkpoint to output_dir
+12/04/2022 13:46:38 - INFO - trainer -   Epoch: 7, Train loss: 3.307, Val loss: 3.223, Epoch time = 100.189s
+12/04/2022 13:46:38 - INFO - trainer -   Saving model checkpoint to output_dir
+12/04/2022 13:48:20 - INFO - trainer -   Epoch: 8, Train loss: 3.189, Val loss: 3.120, Epoch time = 100.194s
+12/04/2022 13:48:20 - INFO - trainer -   Saving model checkpoint to output_dir
+12/04/2022 13:50:02 - INFO - trainer -   Epoch: 9, Train loss: 3.086, Val loss: 3.033, Epoch time = 100.261s
+12/04/2022 13:50:02 - INFO - trainer -   Saving model checkpoint to output_dir
+12/04/2022 13:51:44 - INFO - trainer -   Epoch: 10, Train loss: 2.996, Val loss: 2.958, Epoch time = 100.403s
+12/04/2022 13:51:44 - INFO - trainer -   Saving model checkpoint to output_dir

@@ -42,7 +42,7 @@ if __name__ == '__main__':
     train_group.add_argument("--beta1", default=0.9, type=float, help="")
     train_group.add_argument("--beta2", default=0.98, type=float, help="")
     train_group.add_argument("--epsilon", default=1e-9, type=float, help="")
-    train_group.add_argument("--warmup_steps", default=4000, type=float, help="")
+    train_group.add_argument("--warmup_steps", default=500, type=float, help="")
     train_group.add_argument("--parallel", action="store_true", help="")
     train_group.add_argument("--epsilon_ls", default=0.1, type=float, help="label smoothing")
 

@@ -38,8 +38,8 @@ class Trainer(object):
                                           lr=args.learning_rate,
                                           betas=(args.beta1, args.beta2),
                                           eps=args.epsilon)
-        self.scheduler = get_vanilla_schedule_with_warmup(self.optimizer, d_model=args.d_model,
-                                                          num_warmup_steps=args.warmup_steps)
+        # self.scheduler = get_vanilla_schedule_with_warmup(self.optimizer, d_model=args.d_model,
+        #                                                   num_warmup_steps=args.warmup_steps)
 
         self.datasets = Multi30k
 
@@ -67,6 +67,8 @@ class Trainer(object):
             loss.backward()
 
             self.optimizer.step()
+            # self.scheduler.step()  # Update learning rate schedule
+
             losses += loss.item()
             loss_list.append(loss.item())
             print(f"Train loss: {loss.item():.5f}")

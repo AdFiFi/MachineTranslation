@@ -1,8 +1,7 @@
-import torch
 from torch import nn
+from transformers.generation_utils import GenerationMixin
 
 from .Embed import DataEmbedding
-
 from .Transformer_EncDec import Encoder, Decoder
 
 
@@ -25,7 +24,8 @@ class TransformerConfig:
 
 class Transformer(nn.Module):
     def __init__(self, config: TransformerConfig):
-        super(Transformer, self).__init__()
+        super().__init__()
+        self.config = config
         self.output_attention = config.output_attention
 
         # Embedding
@@ -35,6 +35,8 @@ class Transformer(nn.Module):
         self.encoder = Encoder(config)
         # Decoder
         self.decoder = Decoder(config)
+
+        self.init_parameters()
 
     def forward(self, enc_ids, dec_ids, enc_padding_mask, dec_padding_mask,
                 enc_attn_mask=None, dec_attn_mask=None, dec_enc_mask=None):
@@ -59,3 +61,80 @@ class Transformer(nn.Module):
         for p in self.parameters():
             if p.dim() > 1:
                 nn.init.xavier_uniform_(p)
+
+
+class TransformerForGeneration(Transformer, GenerationMixin):
+    def __init__(self, config: TransformerConfig):
+        super().__init__()
+        self.config = config
+        self.output_attention = config.output_attention
+
+        # Embedding
+        self.enc_embedding = DataEmbedding(config.enc_vocab_size, config.d_model, config.dropout)
+        self.dec_embedding = DataEmbedding(config.dec_vocab_size, config.d_model, config.dropout)
+        # Encoder
+        self.encoder = Encoder(config)
+        # Decoder
+        self.decoder = Decoder(config)
+
+        self.init_parameters()
+
+    def forward(self, enc_ids, dec_ids, enc_padding_mask, dec_padding_mask,
+                enc_attn_mask=None, dec_attn_mask=None, dec_enc_mask=None):
+
+        enc_embeds = self.enc_embedding(enc_ids)
+        enc_encoding, attns = self.encoder(enc_embeds,
+                                           padding_mask=enc_padding_mask,
+                                           attn_mask=enc_attn_mask)
+
+        dec_embeds = self.dec_embedding(dec_ids)
+        dec_out = self.decoder(dec_embeds, enc_encoding,
+                               padding_mask=dec_padding_mask,
+                               attn_mask=dec_attn_mask,
+                               cross_mask=dec_enc_mask)
+
+        if self.output_attention:
+            return dec_out, attns
+        else:
+            return dec_out
+
+    def init_parameters(self):
+        for p in self.parameters():
+            if p.dim() > 1:
+                nn.init.xavier_uniform_(p)
+
+    def _reorder_cache(self, past, beam_idx):
+        reordered_past = ()
+        for layer_past in past:
+            # cached cross_attention states don't have to be reordered -> they are always the same
+            reordered_past += (
+                tuple(past_state.index_select(0, beam_idx) for past_state in layer_past[:2]) + layer_past[2:],
+            )
+        return reordered_past
+
+    # def prepare_inputs_for_generation(self, ## todo
+    #     dec_ids,
+    #     past=None,
+    #     attention_mask=None,
+    #     head_mask=None,
+    #     decoder_head_mask=None,
+    #     cross_attn_head_mask=None,
+    #     use_cache=None,
+    #     encoder_outputs=None,
+    #     **kwargs
+    # ):
+    #     # cut decoder_input_ids if past is used
+    #     if past is not None:
+    #         decoder_input_ids = decoder_input_ids[:, -1:]
+    #
+    #     return {
+    #         "enc_ids": None,  # encoder_outputs is defined. input_ids not needed
+    #         "encoder_outputs": encoder_outputs,
+    #         "past_key_values": past,
+    #         "decoder_input_ids": decoder_input_ids,
+    #         "attention_mask": attention_mask,
+    #         "head_mask": head_mask,
+    #         "decoder_head_mask": decoder_head_mask,
+    #         "cross_attn_head_mask": cross_attn_head_mask,
+    #         "use_cache": use_cache,  # change this to avoid caching (presumably for debugging)
+    #     }

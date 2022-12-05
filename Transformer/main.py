@@ -7,9 +7,15 @@ logger = logging.getLogger(__name__)
 
 
 def main(args):
-    init_logger(f'{args.log_dir}/train.log')
     trainer = Trainer(args)
-    trainer.train()
+    if args.do_train:
+        init_logger(f'{args.log_dir}/train.log')
+        trainer.train()
+    else:
+        if args.do_evaluate:
+            init_logger(f'{args.log_dir}/evaluate.log')
+            trainer.load_model()
+            trainer.evaluate()
 
     pass
 
@@ -36,6 +42,8 @@ if __name__ == '__main__':
     model_group.add_argument("--model_dir", default="output_dir", type=str, help="")
 
     train_group = parser.add_argument_group(title="train", description="")
+    train_group.add_argument("--do_train", action="store_true", help="")
+    train_group.add_argument("--do_parallel", action="store_true", help="")
     train_group.add_argument("--device", default="cuda", type=str, help="")
     train_group.add_argument("--train_batch_size", default=128, type=int, help="")
     train_group.add_argument("--num_epochs", default=4, type=int, help="")
@@ -43,12 +51,13 @@ if __name__ == '__main__':
     train_group.add_argument("--beta1", default=0.9, type=float, help="")
     train_group.add_argument("--beta2", default=0.98, type=float, help="")
     train_group.add_argument("--epsilon", default=1e-9, type=float, help="")
-    train_group.add_argument("--schedule", default='linear', type=float, help="")
-    train_group.add_argument("--warmup_steps", default=4000, type=float, help="")
-    train_group.add_argument("--parallel", action="store_true", help="")
+    train_group.add_argument("--schedule", default='linear', type=str, help="")
+    train_group.add_argument("--warmup_steps", default=4000, type=int, help="")
+    train_group.add_argument("--save_steps", default=2000, type=int, help="")
     train_group.add_argument("--epsilon_ls", default=0.1, type=float, help="label smoothing")
 
     evaluate_group = parser.add_argument_group(title="evaluate", description="")
+    evaluate_group.add_argument("--do_evaluate", action="store_true", help="")
     evaluate_group.add_argument("--evaluate_batch_size", default=128, type=int, help="")
     evaluate_group.add_argument("--beam_num", default=5, type=int, help="")
     evaluate_group.add_argument("--alpha", default=0.6, type=float, help="length penalty")

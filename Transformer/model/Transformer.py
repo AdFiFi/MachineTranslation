@@ -63,21 +63,9 @@ class Transformer(nn.Module):
                 nn.init.xavier_uniform_(p)
 
 
-class TransformerForGeneration(Transformer, GenerationMixin):
+class TransformerForTranslation(Transformer, GenerationMixin):
     def __init__(self, config: TransformerConfig):
-        super().__init__()
-        self.config = config
-        self.output_attention = config.output_attention
-
-        # Embedding
-        self.enc_embedding = DataEmbedding(config.enc_vocab_size, config.d_model, config.dropout)
-        self.dec_embedding = DataEmbedding(config.dec_vocab_size, config.d_model, config.dropout)
-        # Encoder
-        self.encoder = Encoder(config)
-        # Decoder
-        self.decoder = Decoder(config)
-
-        self.init_parameters()
+        super().__init__(config)
 
     def forward(self, enc_ids, dec_ids, enc_padding_mask, dec_padding_mask,
                 enc_attn_mask=None, dec_attn_mask=None, dec_enc_mask=None):
@@ -98,11 +86,6 @@ class TransformerForGeneration(Transformer, GenerationMixin):
         else:
             return dec_out
 
-    def init_parameters(self):
-        for p in self.parameters():
-            if p.dim() > 1:
-                nn.init.xavier_uniform_(p)
-
     def _reorder_cache(self, past, beam_idx):
         reordered_past = ()
         for layer_past in past:
@@ -117,8 +100,6 @@ class TransformerForGeneration(Transformer, GenerationMixin):
     #     past=None,
     #     attention_mask=None,
     #     head_mask=None,
-    #     decoder_head_mask=None,
-    #     cross_attn_head_mask=None,
     #     use_cache=None,
     #     encoder_outputs=None,
     #     **kwargs

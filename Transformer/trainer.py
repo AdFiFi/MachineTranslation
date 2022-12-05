@@ -32,9 +32,7 @@ class Trainer(object):
 
         self.model = Transformer(self.model_config).to(args.device)
         if args.do_parallel:
-            self.model = torch.nn.DataParallel(self.model,
-                                               device_ids=[d for d in range(1, torch.cuda.device_count()-1)],
-                                               output_device=0)
+            self.model = torch.nn.DataParallel(self.model)
 
         self.loss_fn = torch.nn.CrossEntropyLoss(ignore_index=PAD_IDX)
         self.optimizer = torch.optim.Adam(self.model.parameters(),
@@ -103,7 +101,7 @@ class Trainer(object):
             self.save_model()
 
     def evaluate(self):
-        evaluate_datasets = self.datasets['train']
+        evaluate_datasets = self.datasets['validation']
         evaluate_dataloader = DataLoader(evaluate_datasets,
                                          batch_size=self.args.evaluate_batch_size,
                                          collate_fn=self.collate_fn,
@@ -113,6 +111,30 @@ class Trainer(object):
         loss_list = []
         with torch.no_grad():
             for src_ids, tgt_ids in evaluate_dataloader:
+                enc_ids = src_ids.to(self.device)
+                tgt_ids = tgt_ids.to(self.device)
+                dec_ids = tgt_ids[:, :-1]
+                enc_padding_mask, dec_padding_mask = create_mask(enc_ids, dec_ids, self.device)
+                logits = self.model(enc_ids, dec_ids,
+                                    enc_padding_mask, dec_padding_mask)
+                tgt_out = tgt_ids[:, 1:]
+                loss = self.loss_fn(logits.reshape(-1, logits.shape[-1]), tgt_out.reshape(-1))
+                losses += loss.item()
+                loss_list.append(loss.item())
+                print(f"Evaluate loss: {loss.item():.5f}")
+        return losses / len(loss_list)
+
+    def test(self):
+        test_datasets = self.datasets['test']
+        test_dataloader = DataLoader(test_datasets,
+                                     batch_size=self.args.evaluate_batch_size,
+                                     collate_fn=self.collate_fn,
+                                     num_workers=10)
+        self.model.eval()
+        losses = 0
+        loss_list = []
+        with torch.no_grad():
+            for src_ids, tgt_ids in test_dataloader:
                 enc_ids = src_ids.to(self.device)
                 tgt_ids = tgt_ids.to(self.device)
                 dec_ids = tgt_ids[:, :-1]
@@ -149,7 +171,5 @@ class Trainer(object):
         self.model = torch.load(os.path.join(path, 'model.bin'))
         self.model.to(self.device)
         if self.args.do_parallel:
-            self.model = torch.nn.DataParallel(self.model,
-                                               device_ids=[d for d in range(1, torch.cuda.device_count()-1)],
-                                               output_device=0)
+            self.model = torch.nn.DataParallel(self.model)
         logger.info("***** Model Loaded *****")

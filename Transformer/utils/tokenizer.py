@@ -1,14 +1,9 @@
 import os
-from typing import Iterable, List
 
 import torch
-from datasets import load_dataset, Dataset, table
+from datasets import load_dataset
 from tokenizers import CharBPETokenizer
 from tokenizers.models import BPE
-from torch import nn
-from torchtext.data.utils import get_tokenizer
-from torchtext.datasets import Multi30k
-from torchtext.vocab import build_vocab_from_iterator
 
 UNK_IDX, PAD_IDX, BOS_IDX, EOS_IDX = 0, 1, 2, 3
 special_tokens = ['<pad>', '<unk>', '<bos>', '<eos>']

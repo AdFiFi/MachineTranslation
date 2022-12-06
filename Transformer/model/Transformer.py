@@ -1,3 +1,4 @@
+import torch
 from torch import nn
 # from transformers.generation_utils import GenerationMixin
 
@@ -54,12 +55,14 @@ class Transformer(nn.Module):
         self.init_parameters()
 
     def forward(self, enc_ids, dec_ids, enc_padding_mask, dec_padding_mask,
-                enc_attn_mask=None, dec_attn_mask=None, dec_enc_mask=None):
-
-        enc_embeds = self.enc_embedding(enc_ids)
-        enc_encoding, attns = self.encoder(enc_embeds,
-                                           padding_mask=enc_padding_mask,
-                                           attn_mask=enc_attn_mask)
+                enc_attn_mask=None, dec_attn_mask=None, dec_enc_mask=None,
+                use_cache=False, enc_encoding=None):
+        attns = None
+        if not use_cache and enc_encoding is None:
+            enc_embeds = self.enc_embedding(enc_ids)
+            enc_encoding, attns = self.encoder(enc_embeds,
+                                               padding_mask=enc_padding_mask,
+                                               attn_mask=enc_attn_mask)
 
         dec_embeds = self.dec_embedding(dec_ids)
         dec_out = self.decoder(dec_embeds, enc_encoding,
@@ -76,6 +79,30 @@ class Transformer(nn.Module):
         for p in self.parameters():
             if p.dim() > 1:
                 nn.init.xavier_uniform_(p)
+
+    def encode(self, enc_ids, enc_padding_mask, enc_attn_mask=None):
+        enc_embeds = self.enc_embedding(enc_ids)
+        enc_encoding, attns = self.encoder(enc_embeds,
+                                           padding_mask=enc_padding_mask,
+                                           attn_mask=enc_attn_mask)
+        return enc_encoding, attns
+
+    def decode(self, enc_encoding, dec_ids, past=None, **kwargs):
+        dec_embeds = self.dec_embedding(dec_ids)
+        dec_out = self.decoder(dec_embeds, enc_encoding, **kwargs)
+        return dec_out
+
+    def greedy_generate(self, enc_ids, enc_padding_mask, dec_ids, max_len=None, enc_attn_mask=None):
+        enc_encoding, _ = self.encode(enc_ids, enc_padding_mask, enc_attn_mask)
+        max_len = self.config.max_seq_len if max_len is None else min(max_len, self.config.max_seq_len)
+        out_ids = None
+        for i in range(max_len - 1):
+            logits = self.decoder(enc_ids, dec_ids)
+            out_ids = logits.data.max(2, keepdim=True)[1].squeeze(2)
+            dec_ids = torch.cat((dec_ids[:, 0], out_ids), dim=1)
+
+        return dec_ids, out_ids
+
 
 #
 # class TransformerForTranslation(Transformer, GenerationMixin):

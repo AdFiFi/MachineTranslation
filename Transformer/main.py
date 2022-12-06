@@ -53,7 +53,7 @@ if __name__ == '__main__':
     train_group.add_argument("--epsilon", default=1e-9, type=float, help="")
     train_group.add_argument("--schedule", default='linear', type=str, help="")
     train_group.add_argument("--warmup_steps", default=4000, type=int, help="")
-    train_group.add_argument("--save_steps", default=2000, type=int, help="")
+    train_group.add_argument("--save_steps", default=4000, type=int, help="")
     train_group.add_argument("--epsilon_ls", default=0.1, type=float, help="label smoothing")
 
     evaluate_group = parser.add_argument_group(title="evaluate", description="")

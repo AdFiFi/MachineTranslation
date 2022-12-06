@@ -1,10 +1,12 @@
 import json
 import os
+import numpy as np
 from timeit import default_timer as timer
 from tqdm import tqdm
 
 from datasets import load_dataset
 from torch.utils.data import DataLoader, RandomSampler
+from torchtext.data.metrics import bleu_score
 
 from model import Transformer, TransformerConfig
 from utils import *
@@ -133,20 +135,47 @@ class Trainer(object):
         self.model.eval()
         losses = 0
         loss_list = []
+        preds_ids = None
+        target_ids = None
+
         with torch.no_grad():
-            for src_ids, tgt_ids in test_dataloader:
+            for src_ids, tgt_ids in tqdm(test_dataloader, desc="Predicting:", ncols=0):
                 enc_ids = src_ids.to(self.device)
                 tgt_ids = tgt_ids.to(self.device)
-                dec_ids = tgt_ids[:, :-1]
-                enc_padding_mask, dec_padding_mask = create_mask(enc_ids, dec_ids, self.device)
-                logits = self.model(enc_ids, dec_ids,
-                                    enc_padding_mask, dec_padding_mask)
+                dec_ids = tgt_ids[:, :0]
                 tgt_out = tgt_ids[:, 1:]
+                enc_padding_mask, dec_padding_mask = create_mask(enc_ids, dec_ids, self.device)
+
+                dec_ids, logits = self.model.greedy_generate(enc_ids, enc_padding_mask, dec_ids)
+
                 loss = self.loss_fn(logits.reshape(-1, logits.shape[-1]), tgt_out.reshape(-1))
                 losses += loss.item()
                 loss_list.append(loss.item())
                 print(f"Evaluate loss: {loss.item():.5f}")
-        return losses / len(loss_list)
+
+                if preds_ids is None:
+                    preds_ids = dec_ids.detach().cpu().numpy()
+                    target_ids = tgt_out.detach().cpu().numpy()
+                else:
+                    preds_ids = np.append(preds_ids, dec_ids.detach().cpu().numpy(), axis=0)
+                    target_ids = np.append(target_ids, tgt_out.detach().cpu().numpy(), axis=0)
+
+        text_target_list = []
+        text_generation_list = []
+        for i in range(preds_ids.shape[0]):
+            text_target = self.tokenizer.decode(target_ids[i], skip_special_tokens=False)
+            text_generation = self.tokenizer.decode(preds_ids[i], skip_special_tokens=False)
+            text_target_list.append(text_target)
+            text_generation_list.append(text_generation)
+
+        blue = 0     # todo
+        results = {
+            "loss": losses / len(loss_list),
+            "BLUE": blue
+        }
+        logger.info(f"{results}")
+
+
 
     def save_model(self):
         # Save model checkpoint (Overwrite)

@@ -37,12 +37,8 @@ class Trainer(object):
             self.model = torch.nn.DataParallel(self.model)
 
         self.loss_fn = torch.nn.CrossEntropyLoss(ignore_index=PAD_IDX)
-        self.optimizer = torch.optim.Adam(self.model.parameters(),
-                                          lr=args.learning_rate,
-                                          betas=(args.beta1, args.beta2),
-                                          eps=args.epsilon)
-        self.scheduler = get_vanilla_schedule_with_warmup(self.optimizer, d_model=args.d_model,
-                                                          num_warmup_steps=args.warmup_steps)
+        self.optimizer = None
+        self.scheduler = None
 
         # self.datasets = Multi30k
         self.datasets = load_dataset('wmt14', self.task)
@@ -89,6 +85,19 @@ class Trainer(object):
         return losses / len(loss_list)
 
     def train(self):
+        logger.info("***** Running training *****")
+        logger.info("  Num examples = %d", len(self.datasets['train']))
+        logger.info("  Num Epochs = %d", self.args.num_epochs)
+        logger.info("  Total train batch size = %d", self.args.train_batch_size)
+        logger.info("  warmup steps = %d", self.args.warmup_steps)
+        logger.info("  Total optimization steps = %d", self.args.num_epochs*len(self.datasets['train']))
+        logger.info("  Save steps = %d", self.args.save_steps)
+        self.optimizer = torch.optim.Adam(self.model.parameters(),
+                                          lr=self.args.learning_rate,
+                                          betas=(self.args.beta1, self.args.beta2),
+                                          eps=self.args.epsilon)
+        self.scheduler = get_vanilla_schedule_with_warmup(self.optimizer, d_model=self.args.d_model,
+                                                          num_warmup_steps=self.args.warmup_steps)
         for epoch in tqdm(range(1, self.args.num_epochs + 1), desc="epoch"):
             start_time = timer()
             train_loss = self.train_epoch()
@@ -103,11 +112,15 @@ class Trainer(object):
             self.save_model()
 
     def evaluate(self):
+
         evaluate_datasets = self.datasets['validation']
         evaluate_dataloader = DataLoader(evaluate_datasets,
                                          batch_size=self.args.evaluate_batch_size,
                                          collate_fn=self.collate_fn,
                                          num_workers=10)
+        logger.info("***** Running evaluation on validation dataset *****")
+        logger.info("  Num examples = %d", len(evaluate_datasets))
+        logger.info("  Batch size = %d", self.args.evaluate_batch_size)
         self.model.eval()
         losses = 0
         loss_list = []
@@ -132,9 +145,14 @@ class Trainer(object):
                                      batch_size=self.args.evaluate_batch_size,
                                      collate_fn=self.collate_fn,
                                      num_workers=10)
+        logger.info("***** Running prediction on test dataset *****")
+        logger.info("  Num examples = %d", len(test_datasets))
+        logger.info("  Batch size = %d", self.args.evaluate_batch_size)
+        logger.info("  Search strategy = %s",
+                    "greedy search" if self.args.beam_num == 1 else f"beam search(beam num={self.args.beam_num})")
         self.model.eval()
-        losses = 0
-        loss_list = []
+        # losses = 0
+        # loss_list = []
         preds_ids = None
         target_ids = None
 
@@ -142,16 +160,16 @@ class Trainer(object):
             for src_ids, tgt_ids in tqdm(test_dataloader, desc="Predicting:", ncols=0):
                 enc_ids = src_ids.to(self.device)
                 tgt_ids = tgt_ids.to(self.device)
-                dec_ids = tgt_ids[:, :0]
+                dec_ids = tgt_ids[:, :1]
                 tgt_out = tgt_ids[:, 1:]
                 enc_padding_mask, dec_padding_mask = create_mask(enc_ids, dec_ids, self.device)
 
                 dec_ids, logits = self.model.greedy_generate(enc_ids, enc_padding_mask, dec_ids)
 
-                loss = self.loss_fn(logits.reshape(-1, logits.shape[-1]), tgt_out.reshape(-1))
-                losses += loss.item()
-                loss_list.append(loss.item())
-                print(f"Evaluate loss: {loss.item():.5f}")
+                # loss = self.loss_fn(logits.reshape(-1, logits.shape[-1]), tgt_out.reshape(-1))
+                # losses += loss.item()
+                # loss_list.append(loss.item())
+                # print(f"Evaluate loss: {loss.item():.5f}")
 
                 if preds_ids is None:
                     preds_ids = dec_ids.detach().cpu().numpy()
@@ -159,23 +177,22 @@ class Trainer(object):
                 else:
                     preds_ids = np.append(preds_ids, dec_ids.detach().cpu().numpy(), axis=0)
                     target_ids = np.append(target_ids, tgt_out.detach().cpu().numpy(), axis=0)
-
+                # break
         text_target_list = []
         text_generation_list = []
         for i in range(preds_ids.shape[0]):
-            text_target = self.tokenizer.decode(target_ids[i], skip_special_tokens=False)
-            text_generation = self.tokenizer.decode(preds_ids[i], skip_special_tokens=False)
-            text_target_list.append(text_target)
+            text_target = self.tokenizer.decode(target_ids[i], skip_special_tokens=True)
+            text_generation = self.tokenizer.decode(preds_ids[i], skip_special_tokens=True)
+            text_target_list.append([text_target])
             text_generation_list.append(text_generation)
 
-        blue = 0     # todo
+        blue = bleu_score(text_generation_list, text_target_list)
         results = {
-            "loss": losses / len(loss_list),
+            # "loss": losses / len(loss_list),
             "BLUE": blue
         }
         logger.info(f"{results}")
-
-
+        return results
 
     def save_model(self):
         # Save model checkpoint (Overwrite)
@@ -194,10 +211,11 @@ class Trainer(object):
     def load_model(self):
         path = os.path.join(self.args.model_dir, self.task, 'model.bin')
         if not os.path.exists(path):
+            logger.info("Model doesn't exists! Train first!")
             return
             # raise Exception("Model doesn't exists! Train first!")
 
-        self.model = torch.load(os.path.join(path, 'model.bin'))
+        self.model = torch.load(os.path.join(path))
         self.model.to(self.device)
         if self.args.do_parallel:
             self.model = torch.nn.DataParallel(self.model)

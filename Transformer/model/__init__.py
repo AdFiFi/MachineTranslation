@@ -1,1 +1,1 @@
-from .Transformer import Transformer, TransformerConfig, TransformerForTranslation
+from .Transformer import Transformer, TransformerConfig

@@ -52,7 +52,7 @@ class Transformer(nn.Module):
         # Decoder
         self.decoder = Decoder(config)
 
-        self.init_parameters()
+        # self.init_parameters()
 
     def forward(self, enc_ids, dec_ids, enc_padding_mask, dec_padding_mask,
                 enc_attn_mask=None, dec_attn_mask=None, dec_enc_mask=None,
@@ -78,7 +78,7 @@ class Transformer(nn.Module):
     def init_parameters(self):
         for p in self.parameters():
             if p.dim() > 1:
-                nn.init.xavier_uniform_(p)
+                nn.init.normal_(p, mean=0, std=1)
 
     def encode(self, enc_ids, enc_padding_mask, enc_attn_mask=None):
         enc_embeds = self.enc_embedding(enc_ids)
@@ -95,13 +95,16 @@ class Transformer(nn.Module):
     def greedy_generate(self, enc_ids, enc_padding_mask, dec_ids, max_len=None, enc_attn_mask=None):
         enc_encoding, _ = self.encode(enc_ids, enc_padding_mask, enc_attn_mask)
         max_len = self.config.max_seq_len if max_len is None else min(max_len, self.config.max_seq_len)
-        out_ids = None
+        logits = None
         for i in range(max_len - 1):
-            logits = self.decoder(enc_ids, dec_ids)
-            out_ids = logits.data.max(2, keepdim=True)[1].squeeze(2)
-            dec_ids = torch.cat((dec_ids[:, 0], out_ids), dim=1)
+            logits = self.decode(enc_encoding, dec_ids)
+            next_ids = logits[:, i]
+            next_ids = next_ids.data.max(-1, keepdim=True)[1]
+            dec_ids = torch.cat((dec_ids, next_ids), dim=1)
+            if all(torch.logical_or(next_ids == self.config.pad_token_id, next_ids == self.config.eos_token_id)):
+                break
 
-        return dec_ids, out_ids
+        return dec_ids, logits
 
 
 #

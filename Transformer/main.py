@@ -16,6 +16,10 @@ def main(args):
             init_logger(f'{args.log_dir}/evaluate.log')
             trainer.load_model()
             trainer.evaluate()
+        if args.do_test:
+            init_logger(f'{args.log_dir}/test.log')
+            trainer.load_model()
+            trainer.test()
 
     pass
 
@@ -58,8 +62,9 @@ if __name__ == '__main__':
 
     evaluate_group = parser.add_argument_group(title="evaluate", description="")
     evaluate_group.add_argument("--do_evaluate", action="store_true", help="")
+    evaluate_group.add_argument("--do_test", action="store_true", help="")
     evaluate_group.add_argument("--evaluate_batch_size", default=128, type=int, help="")
-    evaluate_group.add_argument("--beam_num", default=5, type=int, help="")
+    evaluate_group.add_argument("--beam_num", default=1, type=int, help="")
     evaluate_group.add_argument("--alpha", default=0.6, type=float, help="length penalty")
 
     Args = parser.parse_args()

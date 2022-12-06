@@ -34,6 +34,7 @@ if __name__ == '__main__':
     data_group.add_argument("--data_dir", default="./data", type=str, help="")
     data_group.add_argument("--src_language", default="de", type=str, help="")
     data_group.add_argument("--tgt_language", default="en", type=str, help="")
+    data_group.add_argument("--data_processors", default=0, type=int, help="")
 
     model_group = parser.add_argument_group(title="model", description="")
     model_group.add_argument("--d_model", default=512, type=int, help="")

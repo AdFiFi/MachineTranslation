@@ -1,1 +1,1 @@
-from .Transformer import Transformer, TransformerConfig
+from .Cube import Cube, CubeConfig

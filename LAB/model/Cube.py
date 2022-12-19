@@ -3,10 +3,10 @@ from torch import nn
 # from transformers.generation_utils import GenerationMixin
 
 from .Embed import DataEmbedding
-from .Transformer_EncDec import Encoder, Decoder
+from .Enc_Dec import Encoder, Decoder
 
 
-class TransformerConfig:
+class CubeConfig:
     def __init__(self, enc_vocab_size=20000,
                  dec_vocab_size=20000,
                  max_seq_len=256,
@@ -38,8 +38,8 @@ class TransformerConfig:
         self.eos_token_id = eos_token_id
 
 
-class Transformer(nn.Module):
-    def __init__(self, config: TransformerConfig):
+class Cube(nn.Module):
+    def __init__(self, config: CubeConfig):
         super().__init__()
         self.config = config
         self.output_attention = config.output_attention

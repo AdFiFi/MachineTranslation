@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from .Attention_Family import FullAttention, AttentionLayer
+from .Attention import FullAttention, AttentionLayer
 from utils import triangular_causal_mask, mask_expand
 
 

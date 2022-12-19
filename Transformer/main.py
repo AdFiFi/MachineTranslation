@@ -31,6 +31,7 @@ if __name__ == '__main__':
     global_group.add_argument("--log_dir", default="./log_dir", type=str, help="")
 
     data_group = parser.add_argument_group(title="data", description="")
+    data_group.add_argument("--datasets", default='Multi30k', type=str, help="")
     data_group.add_argument("--data_dir", default="./data", type=str, help="")
     data_group.add_argument("--src_language", default="de", type=str, help="")
     data_group.add_argument("--tgt_language", default="en", type=str, help="")
@@ -59,6 +60,7 @@ if __name__ == '__main__':
     train_group.add_argument("--schedule", default='linear', type=str, help="")
     train_group.add_argument("--warmup_steps", default=4000, type=int, help="")
     train_group.add_argument("--save_steps", default=4000, type=int, help="")
+    train_group.add_argument("--test_steps", default=1000, type=int, help="")
     train_group.add_argument("--epsilon_ls", default=0.1, type=float, help="label smoothing")
 
     evaluate_group = parser.add_argument_group(title="evaluate", description="")

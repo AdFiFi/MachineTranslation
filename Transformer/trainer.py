@@ -10,6 +10,7 @@ from torchtext.data.metrics import bleu_score
 
 from model import Transformer, TransformerConfig
 from utils import *
+from data import *
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -20,7 +21,7 @@ class Trainer(object):
         self.args = args
         self.task = f'{args.src_language}-{args.tgt_language}'
         self.device = 'cuda' if args.device != 'cpu' and torch.cuda.is_available() else args.device
-        self.tokenizer = Tokenizer(args.src_language, args.tgt_language).load(os.path.join(args.model_dir, self.task))
+        self.tokenizer = SharedTokenizer(args.src_language, args.tgt_language).load(os.path.join(args.model_dir, self.task))
 
         self.model_config = TransformerConfig(enc_vocab_size=self.tokenizer.get_vocab_size(),
                                               dec_vocab_size=self.tokenizer.get_vocab_size(),
@@ -40,11 +41,16 @@ class Trainer(object):
         self.optimizer = None
         self.scheduler = None
 
-        # self.datasets = Multi30k
-        self.datasets = load_dataset('wmt14', self.task)
+        self.datasets = self.load_datasets()
+
+    def load_datasets(self):
+        if self.args.datasets == 'wmt14':
+            return load_dataset('wmt14', self.task)
+        elif self.args.datasets == 'Multi30k':
+            return get_Multi30k_datadict(self.args.src_language, self.args.tgt_language)
 
     def collate_fn(self, x):
-        return collate_fn(x, self.tokenizer, self.model_config.max_seq_len)
+        return collate_fn_with_shared_tokenizer(x, self.tokenizer, self.model_config.max_seq_len)
 
     def empty_cache(self):
         if self.device == 'cuda':
@@ -57,7 +63,7 @@ class Trainer(object):
                                       sampler=sampler,
                                       batch_size=self.args.train_batch_size,
                                       collate_fn=self.collate_fn,
-                                      num_workers=10)
+                                      num_workers=self.args.data_processors)
         self.model.train()
         losses = 0
         loss_list = []
@@ -80,24 +86,36 @@ class Trainer(object):
             losses += loss.item()
             loss_list.append(loss.item())
             print(f"Train loss: {loss.item():.5f}")
-            if step // self.args.save_steps == 0:
+            if step % self.args.save_steps == 0:
                 self.save_model()
+            if (step + 1) % self.args.test_steps == 0:
+                self.test(mode='single')
+
         return losses / len(loss_list)
 
+    def evaluate_single(self):
+
+        pass
+
     def train(self):
+        total = self.args.num_epochs*len(self.datasets['train'])
         logger.info("***** Running training *****")
         logger.info("  Num examples = %d", len(self.datasets['train']))
         logger.info("  Num Epochs = %d", self.args.num_epochs)
         logger.info("  Total train batch size = %d", self.args.train_batch_size)
         logger.info("  warmup steps = %d", self.args.warmup_steps)
-        logger.info("  Total optimization steps = %d", self.args.num_epochs*len(self.datasets['train']))
+        logger.info("  Total optimization steps = %d", total)
         logger.info("  Save steps = %d", self.args.save_steps)
         self.optimizer = torch.optim.Adam(self.model.parameters(),
                                           lr=self.args.learning_rate,
                                           betas=(self.args.beta1, self.args.beta2),
                                           eps=self.args.epsilon)
-        self.scheduler = get_vanilla_schedule_with_warmup(self.optimizer, d_model=self.args.d_model,
-                                                          num_warmup_steps=self.args.warmup_steps)
+        if self.args.schedule == 'linear':
+            self.scheduler = get_linear_schedule_with_warmup(self.optimizer, num_warmup_steps=self.args.warmup_steps,
+                                                             num_training_steps=total)
+        else:
+            self.scheduler = get_vanilla_schedule_with_warmup(self.optimizer, d_model=self.args.d_model,
+                                                              num_warmup_steps=self.args.warmup_steps)
         for epoch in tqdm(range(1, self.args.num_epochs + 1), desc="epoch"):
             start_time = timer()
             train_loss = self.train_epoch()
@@ -117,7 +135,7 @@ class Trainer(object):
         evaluate_dataloader = DataLoader(evaluate_datasets,
                                          batch_size=self.args.evaluate_batch_size,
                                          collate_fn=self.collate_fn,
-                                         num_workers=10)
+                                         num_workers=self.args.data_processors)
         logger.info("***** Running evaluation on validation dataset *****")
         logger.info("  Num examples = %d", len(evaluate_datasets))
         logger.info("  Batch size = %d", self.args.evaluate_batch_size)
@@ -139,12 +157,14 @@ class Trainer(object):
                 print(f"Evaluate loss: {loss.item():.5f}")
         return losses / len(loss_list)
 
-    def test(self):
+    def test(self, mode='full'):
         test_datasets = self.datasets['test']
+        sampler = RandomSampler(test_datasets)
         test_dataloader = DataLoader(test_datasets,
+                                     sampler=sampler,
                                      batch_size=self.args.evaluate_batch_size,
                                      collate_fn=self.collate_fn,
-                                     num_workers=10)
+                                     num_workers=self.args.data_processors)
         logger.info("***** Running prediction on test dataset *****")
         logger.info("  Num examples = %d", len(test_datasets))
         logger.info("  Batch size = %d", self.args.evaluate_batch_size)
@@ -155,6 +175,10 @@ class Trainer(object):
         # loss_list = []
         preds_ids = None
         target_ids = None
+        text_target_list = []
+        text_generation_list = []
+        text_target_corpus_list = []
+        text_generation_corpus_list = []
 
         with torch.no_grad():
             for src_ids, tgt_ids in tqdm(test_dataloader, desc="Predicting:", ncols=0):
@@ -171,27 +195,35 @@ class Trainer(object):
                 # loss_list.append(loss.item())
                 # print(f"Evaluate loss: {loss.item():.5f}")
 
-                if preds_ids is None:
-                    preds_ids = dec_ids.detach().cpu().numpy()
-                    target_ids = tgt_out.detach().cpu().numpy()
-                else:
-                    preds_ids = np.append(preds_ids, dec_ids.detach().cpu().numpy(), axis=0)
-                    target_ids = np.append(target_ids, tgt_out.detach().cpu().numpy(), axis=0)
-                # break
-        text_target_list = []
-        text_generation_list = []
-        for i in range(preds_ids.shape[0]):
-            text_target = self.tokenizer.decode(target_ids[i], skip_special_tokens=True)
-            text_generation = self.tokenizer.decode(preds_ids[i], skip_special_tokens=True)
-            text_target_list.append([text_target])
-            text_generation_list.append(text_generation)
+                # if preds_ids is None:
+                #     preds_ids = dec_ids.detach().cpu().numpy()
+                #     target_ids = tgt_out.detach().cpu().numpy()
+                # else:
+                #     preds_ids = np.append(preds_ids, dec_ids.detach().cpu().numpy(), axis=0)
+                #     target_ids = np.append(target_ids, tgt_out.detach().cpu().numpy(), axis=0)
+                preds_ids = dec_ids.detach().cpu().numpy()
+                target_ids = tgt_out.detach().cpu().numpy()
+                for i in range(preds_ids.shape[0]):
+                    text_target = self.tokenizer.decode(target_ids[i], skip_special_tokens=False)
+                    text_generation = self.tokenizer.decode(preds_ids[i], skip_special_tokens=False)
 
-        blue = bleu_score(text_generation_list, text_target_list)
+                    text_target_list.append(text_target)
+                    text_generation_list.append(text_generation)
+                    text_target_corpus_list.append([text_target.split()])
+                    text_generation_corpus_list.append(text_generation.split())
+                if mode == 'single':
+                    break
+
+        blue = bleu_score(text_generation_corpus_list, text_target_corpus_list)
         results = {
             # "loss": losses / len(loss_list),
             "BLUE": blue
         }
         logger.info(f"{results}")
+        if mode == 'single':
+            text = '\n\n'.join([t + '\n' + g for t, g in zip(text_target_list, text_generation_list)])
+            with open('./test.txt', mode='w', encoding='utf-8') as f:
+                f.write(text)
         return results
 
     def save_model(self):

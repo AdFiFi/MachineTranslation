@@ -6,12 +6,12 @@ from tokenizers import CharBPETokenizer
 from tokenizers.models import BPE
 
 UNK_IDX, PAD_IDX, BOS_IDX, EOS_IDX = 0, 1, 2, 3
-special_tokens = ['<pad>', '<unk>', '<bos>', '<eos>']
+special_tokens = ['<unk>', '<pad>', '<bos>', '<eos>']
 
 
-class Tokenizer(CharBPETokenizer):
+class SharedTokenizer(CharBPETokenizer):
     def __init__(self, src_language, tgt_language, vocab=None, merges=None, **kwargs):
-        super(Tokenizer, self).__init__(vocab, merges, **kwargs)
+        super(SharedTokenizer, self).__init__(vocab, merges, **kwargs)
         self.src_language = src_language
         self.tgt_language = tgt_language
 
@@ -32,7 +32,7 @@ class Tokenizer(CharBPETokenizer):
 
     def from_file(self, vocab_filename: str, merges_filename: str, **kwargs):
         vocab, merges = BPE.read_file(vocab_filename, merges_filename)
-        return Tokenizer(self.src_language, self.tgt_language, vocab, merges, **kwargs)
+        return SharedTokenizer(self.src_language, self.tgt_language, vocab, merges, **kwargs)
 
     def load(self, path):
         vocab_path = os.path.join(path, 'vocab.json')
@@ -43,7 +43,7 @@ class Tokenizer(CharBPETokenizer):
 
 
 def train_de_en_tokenizer():
-    tok = Tokenizer('de', 'en')
+    tok = SharedTokenizer('de', 'en')
     data = load_dataset('wmt14', 'de-en')['train']
     de_list = []
     en_list = []
@@ -56,7 +56,7 @@ def train_de_en_tokenizer():
 
 
 def train_fr_en_tokenizer():
-    tok = Tokenizer('fr', 'en')
+    tok = SharedTokenizer('fr', 'en')
     data = load_dataset('wmt14', 'fr-en')['train']
     de_list = []
     en_list = []
@@ -67,9 +67,6 @@ def train_fr_en_tokenizer():
 
     tok.train_from_datasets(new_datasets, vocab_size=37000, save_path='../output_dir/fr-en')
     return tok
-
-
-
 
 
 if __name__ == '__main__':

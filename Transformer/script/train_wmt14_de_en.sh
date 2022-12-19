@@ -13,12 +13,13 @@ python  main.py \
 --data_dir "./data" \
 --src_language "de" \
 --tgt_language "en" \
+--data_processors 10 \
 \
 --d_model 512 \
---num_heads 16 \
+--num_heads 8 \
 --dim_feedforward 2048 \
---num_encoder_layers 3 \
---num_decoder_layers 3 \
+--num_encoder_layers 6 \
+--num_decoder_layers 6 \
 --max_seq_len 128 \
 --activation 'gelu' \
 --model_dir 'output_dir' \
@@ -28,7 +29,7 @@ python  main.py \
 --device "cuda" \
 --train_batch_size 128 \
 --num_epochs 4 \
---learning_rate 1e-5 \
+--learning_rate 0 \
 --beta1 0.9 \
 --beta2 0.98 \
 --epsilon 1e-9 \

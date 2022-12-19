@@ -106,6 +106,8 @@ class Decoder(nn.Module):
         if attn_mask is None:
             B, L, _ = dec_embeds.shape
             attn_mask = triangular_causal_mask(B, L, device=dec_embeds.device)
+            if padding_mask is not None:
+                attn_mask += mask_expand(padding_mask)
         decoding = dec_embeds
 
         for layer in self.layers:

@@ -1,0 +1,90 @@
+12/06/2022 09:15:06 - INFO - trainer -   ***** Model Loaded *****
+12/06/2022 09:15:06 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/06/2022 09:15:06 - INFO - trainer -     Num examples = 3003
+12/06/2022 09:15:06 - INFO - trainer -     Batch size = 128
+12/06/2022 09:19:48 - INFO - trainer -   ***** Model Loaded *****
+12/06/2022 09:19:48 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/06/2022 09:19:48 - INFO - trainer -     Num examples = 3003
+12/06/2022 09:19:48 - INFO - trainer -     Batch size = 128
+12/06/2022 09:23:46 - INFO - trainer -   ***** Model Loaded *****
+12/06/2022 09:23:46 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/06/2022 09:23:46 - INFO - trainer -     Num examples = 3003
+12/06/2022 09:23:46 - INFO - trainer -     Batch size = 10
+12/06/2022 09:23:46 - INFO - trainer -     Search strategy = greedy search
+12/06/2022 09:25:34 - INFO - trainer -   ***** Model Loaded *****
+12/06/2022 09:25:34 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/06/2022 09:25:34 - INFO - trainer -     Num examples = 3003
+12/06/2022 09:25:34 - INFO - trainer -     Batch size = 10
+12/06/2022 09:25:34 - INFO - trainer -     Search strategy = greedy search
+12/06/2022 09:30:40 - INFO - trainer -   ***** Model Loaded *****
+12/06/2022 09:30:40 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/06/2022 09:30:40 - INFO - trainer -     Num examples = 3003
+12/06/2022 09:30:40 - INFO - trainer -     Batch size = 10
+12/06/2022 09:30:40 - INFO - trainer -     Search strategy = greedy search
+12/06/2022 09:35:14 - INFO - trainer -   ***** Model Loaded *****
+12/06/2022 09:35:14 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/06/2022 09:35:14 - INFO - trainer -     Num examples = 3003
+12/06/2022 09:35:14 - INFO - trainer -     Batch size = 10
+12/06/2022 09:35:14 - INFO - trainer -     Search strategy = greedy search
+12/06/2022 09:38:24 - INFO - trainer -   ***** Model Loaded *****
+12/06/2022 09:38:24 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/06/2022 09:38:24 - INFO - trainer -     Num examples = 3003
+12/06/2022 09:38:24 - INFO - trainer -     Batch size = 10
+12/06/2022 09:38:24 - INFO - trainer -     Search strategy = greedy search
+12/06/2022 09:41:01 - INFO - trainer -   ***** Model Loaded *****
+12/06/2022 09:41:01 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/06/2022 09:41:01 - INFO - trainer -     Num examples = 3003
+12/06/2022 09:41:01 - INFO - trainer -     Batch size = 10
+12/06/2022 09:41:01 - INFO - trainer -     Search strategy = greedy search
+12/06/2022 12:20:02 - INFO - trainer -   Model doesn't exists! Train first!
+12/06/2022 12:20:02 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/06/2022 12:20:02 - INFO - trainer -     Num examples = 3003
+12/06/2022 12:20:02 - INFO - trainer -     Batch size = 10
+12/06/2022 12:20:02 - INFO - trainer -     Search strategy = greedy search
+12/06/2022 12:22:00 - INFO - trainer -   Model doesn't exists! Train first!
+12/06/2022 12:22:00 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/06/2022 12:22:00 - INFO - trainer -     Num examples = 3003
+12/06/2022 12:22:00 - INFO - trainer -     Batch size = 10
+12/06/2022 12:22:00 - INFO - trainer -     Search strategy = greedy search
+12/06/2022 12:24:59 - INFO - trainer -   Model doesn't exists! Train first!
+12/06/2022 12:24:59 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/06/2022 12:24:59 - INFO - trainer -     Num examples = 3003
+12/06/2022 12:24:59 - INFO - trainer -     Batch size = 10
+12/06/2022 12:24:59 - INFO - trainer -     Search strategy = greedy search
+12/06/2022 12:26:02 - INFO - trainer -   Model doesn't exists! Train first!
+12/06/2022 12:26:02 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/06/2022 12:26:02 - INFO - trainer -     Num examples = 3003
+12/06/2022 12:26:02 - INFO - trainer -     Batch size = 10
+12/06/2022 12:26:02 - INFO - trainer -     Search strategy = greedy search
+12/06/2022 12:26:48 - INFO - trainer -   {'BLUE': 0.0}
+12/19/2022 14:53:32 - INFO - trainer -   ***** Model Loaded *****
+12/19/2022 14:53:32 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 14:53:32 - INFO - trainer -     Num examples = 1000
+12/19/2022 14:53:32 - INFO - trainer -     Batch size = 10
+12/19/2022 14:53:32 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 14:54:18 - INFO - trainer -   ***** Model Loaded *****
+12/19/2022 14:54:18 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 14:54:18 - INFO - trainer -     Num examples = 1000
+12/19/2022 14:54:18 - INFO - trainer -     Batch size = 10
+12/19/2022 14:54:18 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 14:58:11 - INFO - trainer -   ***** Model Loaded *****
+12/19/2022 14:58:11 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 14:58:11 - INFO - trainer -     Num examples = 1000
+12/19/2022 14:58:11 - INFO - trainer -     Batch size = 10
+12/19/2022 14:58:11 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 15:01:30 - INFO - trainer -   ***** Model Loaded *****
+12/19/2022 15:01:30 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 15:01:30 - INFO - trainer -     Num examples = 1000
+12/19/2022 15:01:30 - INFO - trainer -     Batch size = 10
+12/19/2022 15:01:30 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 15:05:50 - INFO - trainer -   ***** Model Loaded *****
+12/19/2022 15:05:50 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 15:05:50 - INFO - trainer -     Num examples = 1000
+12/19/2022 15:05:50 - INFO - trainer -     Batch size = 10
+12/19/2022 15:05:50 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 19:53:14 - INFO - trainer -   ***** Model Loaded *****
+12/19/2022 19:53:14 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 19:53:14 - INFO - trainer -     Num examples = 1000
+12/19/2022 19:53:14 - INFO - trainer -     Batch size = 10
+12/19/2022 19:53:14 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 19:53:39 - INFO - trainer -   {'BLUE': 0.26011425256729126}

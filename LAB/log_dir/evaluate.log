@@ -1,0 +1,4 @@
+12/19/2022 14:51:25 - INFO - trainer -   ***** Model Loaded *****
+12/19/2022 14:51:25 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+12/19/2022 14:51:25 - INFO - trainer -     Num examples = 1015
+12/19/2022 14:51:25 - INFO - trainer -     Batch size = 10

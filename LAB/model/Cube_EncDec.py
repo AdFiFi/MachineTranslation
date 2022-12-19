@@ -7,7 +7,7 @@ from utils import triangular_causal_mask, mask_expand
 
 
 class CubeEncoderLayer(nn.Module):
-    def __init__(self, config):
+    def __init__(self, config, axis):
         super(CubeEncoderLayer, self).__init__()
         self.attention = AttentionLayer(
             FullAttention(attention_dropout=config.dropout, output_attention=config.output_attention),
@@ -37,7 +37,8 @@ class CubeEncoderLayer(nn.Module):
 class CubeEncoder(nn.Module):
     def __init__(self, config):
         super(CubeEncoder, self).__init__()
-        self.attn_layers = nn.ModuleList([CubeEncoderLayer(config) for _ in range(config.num_encoder_layers)])
+        self.attn_layers = nn.ModuleList([CubeEncoderLayer(config, i % 2)
+                                          for i, _ in enumerate(range(config.num_encoder_layers))])
         self.norm = torch.nn.LayerNorm(config.d_model)
 
     def forward(self, enc_embeds, padding_mask=None, attn_mask=None):
@@ -60,7 +61,7 @@ class CubeEncoder(nn.Module):
 
 
 class CubeDecoderLayer(nn.Module):
-    def __init__(self, config):
+    def __init__(self, config, axis):
         super(CubeDecoderLayer, self).__init__()
         self.self_attention = AttentionLayer(
             FullAttention(attention_dropout=config.dropout, output_attention=False),
@@ -98,7 +99,8 @@ class CubeDecoderLayer(nn.Module):
 class CubeDecoder(nn.Module):
     def __init__(self, config):
         super(CubeDecoder, self).__init__()
-        self.layers = nn.ModuleList([CubeDecoderLayer(config) for _ in range(config.num_decoder_layers)])
+        self.layers = nn.ModuleList([CubeDecoderLayer(config, i % 2)
+                                     for i, _ in enumerate(range(config.num_decoder_layers))])
         self.norm = torch.nn.LayerNorm(config.d_model)
         self.projection = nn.Linear(config.d_model, config.dec_vocab_size, bias=True)
 

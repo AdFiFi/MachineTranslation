@@ -6,9 +6,9 @@ from .Attention import FullAttention, AttentionLayer
 from utils import triangular_causal_mask, mask_expand
 
 
-class EncoderLayer(nn.Module):
+class TransformerEncoderLayer(nn.Module):
     def __init__(self, config):
-        super(EncoderLayer, self).__init__()
+        super(TransformerEncoderLayer, self).__init__()
         self.attention = AttentionLayer(
             FullAttention(attention_dropout=config.dropout, output_attention=config.output_attention),
             config.d_model, config.num_heads)
@@ -34,10 +34,10 @@ class EncoderLayer(nn.Module):
         return self.norm2(residual + hidden_states), attn
 
 
-class Encoder(nn.Module):
+class TransformerEncoder(nn.Module):
     def __init__(self, config):
-        super(Encoder, self).__init__()
-        self.attn_layers = nn.ModuleList([EncoderLayer(config) for _ in range(config.num_encoder_layers)])
+        super(TransformerEncoder, self).__init__()
+        self.attn_layers = nn.ModuleList([TransformerEncoderLayer(config) for _ in range(config.num_encoder_layers)])
         self.norm = torch.nn.LayerNorm(config.d_model)
 
     def forward(self, enc_embeds, padding_mask=None, attn_mask=None):
@@ -59,9 +59,9 @@ class Encoder(nn.Module):
         return encoding, attns
 
 
-class DecoderLayer(nn.Module):
+class TransformerDecoderLayer(nn.Module):
     def __init__(self, config):
-        super(DecoderLayer, self).__init__()
+        super(TransformerDecoderLayer, self).__init__()
         self.self_attention = AttentionLayer(
             FullAttention(attention_dropout=config.dropout, output_attention=False),
             config.d_model, config.num_heads)
@@ -95,10 +95,10 @@ class DecoderLayer(nn.Module):
         return self.norm3(residual + hidden_states)
 
 
-class Decoder(nn.Module):
+class TransformerDecoder(nn.Module):
     def __init__(self, config):
-        super(Decoder, self).__init__()
-        self.layers = nn.ModuleList([DecoderLayer(config) for _ in range(config.num_decoder_layers)])
+        super(TransformerDecoder, self).__init__()
+        self.layers = nn.ModuleList([TransformerDecoderLayer(config) for _ in range(config.num_decoder_layers)])
         self.norm = torch.nn.LayerNorm(config.d_model)
         self.projection = nn.Linear(config.d_model, config.dec_vocab_size, bias=True)
 

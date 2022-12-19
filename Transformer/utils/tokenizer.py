@@ -5,8 +5,8 @@ from datasets import load_dataset
 from tokenizers import CharBPETokenizer
 from tokenizers.models import BPE
 
-UNK_IDX, PAD_IDX, BOS_IDX, EOS_IDX = 0, 1, 2, 3
-special_tokens = ['<unk>', '<pad>', '<bos>', '<eos>']
+PAD_IDX, UNK_IDX, BOS_IDX, EOS_IDX = 0, 1, 2, 3
+special_tokens = ['<pad>', '<unk>', '<bos>', '<eos>']
 
 
 class SharedTokenizer(CharBPETokenizer):
@@ -74,6 +74,6 @@ if __name__ == '__main__':
     # tok.build()
     # tok.save_model('../output_dir')
 
+    train_de_en_tokenizer()
     # train_fr_en_tokenizer()
-    train_fr_en_tokenizer()
 

@@ -31,13 +31,16 @@ class Trainer(object):
                                               dim_feedforward=args.dim_feedforward,
                                               num_encoder_layers=args.num_encoder_layers,
                                               num_decoder_layers=args.num_decoder_layers,
-                                              activation=args.activation)
+                                              activation=args.activation,
+                                              pad_token_id=PAD_IDX,
+                                              bos_token_id=BOS_IDX,
+                                              eos_token_id=EOS_IDX)
 
         self.model = Transformer(self.model_config).to(args.device)
         if args.do_parallel:
             self.model = torch.nn.DataParallel(self.model)
 
-        self.loss_fn = torch.nn.CrossEntropyLoss(ignore_index=PAD_IDX)
+        self.loss_fn = torch.nn.CrossEntropyLoss()
         self.optimizer = None
         self.scheduler = None
 
@@ -92,10 +95,6 @@ class Trainer(object):
                 self.test(mode='single')
 
         return losses / len(loss_list)
-
-    def evaluate_single(self):
-
-        pass
 
     def train(self):
         total = self.args.num_epochs*len(self.datasets['train'])
@@ -165,16 +164,14 @@ class Trainer(object):
                                      batch_size=self.args.evaluate_batch_size,
                                      collate_fn=self.collate_fn,
                                      num_workers=self.args.data_processors)
-        logger.info("***** Running prediction on test dataset *****")
+        logger.info(f"***** Running prediction on {mode} test dataset *****")
         logger.info("  Num examples = %d", len(test_datasets))
         logger.info("  Batch size = %d", self.args.evaluate_batch_size)
         logger.info("  Search strategy = %s",
                     "greedy search" if self.args.beam_num == 1 else f"beam search(beam num={self.args.beam_num})")
         self.model.eval()
-        # losses = 0
-        # loss_list = []
-        preds_ids = None
-        target_ids = None
+        losses = 0
+        loss_list = []
         text_target_list = []
         text_generation_list = []
         text_target_corpus_list = []
@@ -189,23 +186,15 @@ class Trainer(object):
                 enc_padding_mask, dec_padding_mask = create_mask(enc_ids, dec_ids, self.device)
 
                 dec_ids, logits = self.model.greedy_generate(enc_ids, enc_padding_mask, dec_ids)
-
                 # loss = self.loss_fn(logits.reshape(-1, logits.shape[-1]), tgt_out.reshape(-1))
                 # losses += loss.item()
                 # loss_list.append(loss.item())
-                # print(f"Evaluate loss: {loss.item():.5f}")
 
-                # if preds_ids is None:
-                #     preds_ids = dec_ids.detach().cpu().numpy()
-                #     target_ids = tgt_out.detach().cpu().numpy()
-                # else:
-                #     preds_ids = np.append(preds_ids, dec_ids.detach().cpu().numpy(), axis=0)
-                #     target_ids = np.append(target_ids, tgt_out.detach().cpu().numpy(), axis=0)
                 preds_ids = dec_ids.detach().cpu().numpy()
                 target_ids = tgt_out.detach().cpu().numpy()
                 for i in range(preds_ids.shape[0]):
-                    text_target = self.tokenizer.decode(target_ids[i], skip_special_tokens=False)
-                    text_generation = self.tokenizer.decode(preds_ids[i], skip_special_tokens=False)
+                    text_target = self.tokenizer.decode(target_ids[i], skip_special_tokens=True)
+                    text_generation = self.tokenizer.decode(preds_ids[i], skip_special_tokens=True)
 
                     text_target_list.append(text_target)
                     text_generation_list.append(text_generation)

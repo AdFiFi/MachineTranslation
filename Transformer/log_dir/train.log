@@ -5124,3 +5124,488 @@
 12/19/2022 15:55:59 - INFO - trainer -     Search strategy = greedy search
 12/19/2022 15:56:01 - INFO - trainer -   {'BLUE': 0.012033709324896336}
 12/19/2022 15:56:02 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 16:06:35 - INFO - trainer -   ***** Running training *****
+12/19/2022 16:06:35 - INFO - trainer -     Num examples = 29001
+12/19/2022 16:06:35 - INFO - trainer -     Num Epochs = 10
+12/19/2022 16:06:35 - INFO - trainer -     Total train batch size = 10
+12/19/2022 16:06:35 - INFO - trainer -     warmup steps = 1000
+12/19/2022 16:06:35 - INFO - trainer -     Total optimization steps = 290010
+12/19/2022 16:06:35 - INFO - trainer -     Save steps = 1000
+12/19/2022 16:08:04 - INFO - trainer -   ***** Running training *****
+12/19/2022 16:08:04 - INFO - trainer -     Num examples = 29001
+12/19/2022 16:08:04 - INFO - trainer -     Num Epochs = 10
+12/19/2022 16:08:04 - INFO - trainer -     Total train batch size = 10
+12/19/2022 16:08:04 - INFO - trainer -     warmup steps = 1000
+12/19/2022 16:08:04 - INFO - trainer -     Total optimization steps = 290010
+12/19/2022 16:08:04 - INFO - trainer -     Save steps = 1000
+12/19/2022 16:08:06 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 16:09:04 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 16:09:04 - INFO - trainer -     Num examples = 1000
+12/19/2022 16:09:04 - INFO - trainer -     Batch size = 10
+12/19/2022 16:09:04 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 16:09:06 - INFO - trainer -   {'BLUE': 0.0}
+12/19/2022 16:09:06 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 16:10:05 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 16:10:05 - INFO - trainer -     Num examples = 1000
+12/19/2022 16:10:05 - INFO - trainer -     Batch size = 10
+12/19/2022 16:10:05 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 16:10:07 - INFO - trainer -   {'BLUE': 0.009234258905053139}
+12/19/2022 16:10:07 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 16:11:00 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+12/19/2022 16:11:00 - INFO - trainer -     Num examples = 1015
+12/19/2022 16:11:00 - INFO - trainer -     Batch size = 10
+12/19/2022 16:11:02 - INFO - trainer -   Epoch: 1, Train loss: 6.202, Val loss: 4.489, Epoch time = 176.661s
+12/19/2022 16:11:02 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 16:11:03 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 16:41:37 - INFO - trainer -   ***** Running training *****
+12/19/2022 16:41:37 - INFO - trainer -     Num examples = 29001
+12/19/2022 16:41:37 - INFO - trainer -     Num Epochs = 10
+12/19/2022 16:41:37 - INFO - trainer -     Total train batch size = 10
+12/19/2022 16:41:37 - INFO - trainer -     warmup steps = 1000
+12/19/2022 16:41:37 - INFO - trainer -     Total optimization steps = 290010
+12/19/2022 16:41:37 - INFO - trainer -     Save steps = 1000
+12/19/2022 16:42:26 - INFO - trainer -   ***** Running training *****
+12/19/2022 16:42:26 - INFO - trainer -     Num examples = 29001
+12/19/2022 16:42:26 - INFO - trainer -     Num Epochs = 10
+12/19/2022 16:42:26 - INFO - trainer -     Total train batch size = 10
+12/19/2022 16:42:26 - INFO - trainer -     warmup steps = 1000
+12/19/2022 16:42:26 - INFO - trainer -     Total optimization steps = 290010
+12/19/2022 16:42:26 - INFO - trainer -     Save steps = 1000
+12/19/2022 17:09:28 - INFO - trainer -   ***** Running training *****
+12/19/2022 17:09:28 - INFO - trainer -     Num examples = 29001
+12/19/2022 17:09:28 - INFO - trainer -     Num Epochs = 10
+12/19/2022 17:09:28 - INFO - trainer -     Total train batch size = 10
+12/19/2022 17:09:28 - INFO - trainer -     warmup steps = 1000
+12/19/2022 17:09:28 - INFO - trainer -     Total optimization steps = 290010
+12/19/2022 17:09:28 - INFO - trainer -     Save steps = 1000
+12/19/2022 17:09:30 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:10:29 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 17:10:29 - INFO - trainer -     Num examples = 1000
+12/19/2022 17:10:29 - INFO - trainer -     Batch size = 10
+12/19/2022 17:10:29 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 17:10:31 - INFO - trainer -   {'BLUE': 0.0}
+12/19/2022 17:10:31 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:11:31 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 17:11:31 - INFO - trainer -     Num examples = 1000
+12/19/2022 17:11:31 - INFO - trainer -     Batch size = 10
+12/19/2022 17:11:31 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 17:11:33 - INFO - trainer -   {'BLUE': 0.0}
+12/19/2022 17:11:33 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:12:31 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+12/19/2022 17:12:31 - INFO - trainer -     Num examples = 1015
+12/19/2022 17:12:31 - INFO - trainer -     Batch size = 10
+12/19/2022 17:12:32 - INFO - trainer -   Epoch: 1, Train loss: 6.195, Val loss: 4.462, Epoch time = 182.443s
+12/19/2022 17:12:33 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:12:34 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:13:35 - INFO - trainer -   ***** Running training *****
+12/19/2022 17:13:35 - INFO - trainer -     Num examples = 29001
+12/19/2022 17:13:35 - INFO - trainer -     Num Epochs = 10
+12/19/2022 17:13:35 - INFO - trainer -     Total train batch size = 10
+12/19/2022 17:13:35 - INFO - trainer -     warmup steps = 1000
+12/19/2022 17:13:35 - INFO - trainer -     Total optimization steps = 290010
+12/19/2022 17:13:35 - INFO - trainer -     Save steps = 1000
+12/19/2022 17:13:37 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:14:37 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 17:14:37 - INFO - trainer -     Num examples = 1000
+12/19/2022 17:14:37 - INFO - trainer -     Batch size = 10
+12/19/2022 17:14:37 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 17:14:39 - INFO - trainer -   {'BLUE': 0.0}
+12/19/2022 17:14:40 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:15:40 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 17:15:40 - INFO - trainer -     Num examples = 1000
+12/19/2022 17:15:40 - INFO - trainer -     Batch size = 10
+12/19/2022 17:15:40 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 17:15:42 - INFO - trainer -   {'BLUE': 0.0}
+12/19/2022 17:15:42 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:16:37 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+12/19/2022 17:16:37 - INFO - trainer -     Num examples = 1015
+12/19/2022 17:16:37 - INFO - trainer -     Batch size = 10
+12/19/2022 17:16:39 - INFO - trainer -   Epoch: 1, Train loss: 6.189, Val loss: 4.485, Epoch time = 182.388s
+12/19/2022 17:16:39 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:16:40 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:19:09 - INFO - trainer -   ***** Running training *****
+12/19/2022 17:19:09 - INFO - trainer -     Num examples = 29001
+12/19/2022 17:19:09 - INFO - trainer -     Num Epochs = 10
+12/19/2022 17:19:09 - INFO - trainer -     Total train batch size = 10
+12/19/2022 17:19:09 - INFO - trainer -     warmup steps = 1000
+12/19/2022 17:19:09 - INFO - trainer -     Total optimization steps = 290010
+12/19/2022 17:19:09 - INFO - trainer -     Save steps = 1000
+12/19/2022 17:19:11 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:20:12 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 17:20:12 - INFO - trainer -     Num examples = 1000
+12/19/2022 17:20:12 - INFO - trainer -     Batch size = 10
+12/19/2022 17:20:12 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 17:20:12 - INFO - trainer -   {'BLUE': 0.0}
+12/19/2022 17:20:13 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:21:15 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 17:21:15 - INFO - trainer -     Num examples = 1000
+12/19/2022 17:21:15 - INFO - trainer -     Batch size = 10
+12/19/2022 17:21:15 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 17:21:15 - INFO - trainer -   {'BLUE': 0.04571557909184223}
+12/19/2022 17:21:16 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:22:14 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+12/19/2022 17:22:14 - INFO - trainer -     Num examples = 1015
+12/19/2022 17:22:14 - INFO - trainer -     Batch size = 10
+12/19/2022 17:22:16 - INFO - trainer -   Epoch: 1, Train loss: 4.424, Val loss: 2.994, Epoch time = 185.911s
+12/19/2022 17:22:17 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:22:18 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:23:26 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 17:23:26 - INFO - trainer -     Num examples = 1000
+12/19/2022 17:23:26 - INFO - trainer -     Batch size = 10
+12/19/2022 17:23:26 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 17:23:26 - INFO - trainer -   {'BLUE': 0.0}
+12/19/2022 17:23:27 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:24:29 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 17:24:29 - INFO - trainer -     Num examples = 1000
+12/19/2022 17:24:29 - INFO - trainer -     Batch size = 10
+12/19/2022 17:24:29 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 17:24:29 - INFO - trainer -   {'BLUE': 0.0}
+12/19/2022 17:24:30 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:25:28 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+12/19/2022 17:25:28 - INFO - trainer -     Num examples = 1015
+12/19/2022 17:25:28 - INFO - trainer -     Batch size = 10
+12/19/2022 17:25:30 - INFO - trainer -   Epoch: 2, Train loss: 2.798, Val loss: 2.592, Epoch time = 191.072s
+12/19/2022 17:25:30 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:25:31 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:26:35 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 17:26:35 - INFO - trainer -     Num examples = 1000
+12/19/2022 17:26:35 - INFO - trainer -     Batch size = 10
+12/19/2022 17:26:35 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 17:26:35 - INFO - trainer -   {'BLUE': 0.18207412958145142}
+12/19/2022 17:26:35 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:27:36 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 17:27:36 - INFO - trainer -     Num examples = 1000
+12/19/2022 17:27:36 - INFO - trainer -     Batch size = 10
+12/19/2022 17:27:36 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 17:27:36 - INFO - trainer -   {'BLUE': 0.07538453543860606}
+12/19/2022 17:27:37 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:28:33 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+12/19/2022 17:28:33 - INFO - trainer -     Num examples = 1015
+12/19/2022 17:28:33 - INFO - trainer -     Batch size = 10
+12/19/2022 17:28:35 - INFO - trainer -   Epoch: 3, Train loss: 2.497, Val loss: 2.359, Epoch time = 182.900s
+12/19/2022 17:28:35 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:28:36 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:29:36 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 17:29:36 - INFO - trainer -     Num examples = 1000
+12/19/2022 17:29:36 - INFO - trainer -     Batch size = 10
+12/19/2022 17:29:36 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 17:29:36 - INFO - trainer -   {'BLUE': 0.19386154413223267}
+12/19/2022 17:29:37 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:30:37 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 17:30:37 - INFO - trainer -     Num examples = 1000
+12/19/2022 17:30:37 - INFO - trainer -     Batch size = 10
+12/19/2022 17:30:37 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 17:30:37 - INFO - trainer -   {'BLUE': 0.09582637995481491}
+12/19/2022 17:30:38 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:31:31 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+12/19/2022 17:31:31 - INFO - trainer -     Num examples = 1015
+12/19/2022 17:31:31 - INFO - trainer -     Batch size = 10
+12/19/2022 17:31:33 - INFO - trainer -   Epoch: 4, Train loss: 2.290, Val loss: 2.188, Epoch time = 176.346s
+12/19/2022 17:31:33 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:31:34 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:32:37 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 17:32:37 - INFO - trainer -     Num examples = 1000
+12/19/2022 17:32:37 - INFO - trainer -     Batch size = 10
+12/19/2022 17:32:37 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 17:32:37 - INFO - trainer -   {'BLUE': 0.17270979051903984}
+12/19/2022 17:32:37 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:33:37 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 17:33:37 - INFO - trainer -     Num examples = 1000
+12/19/2022 17:33:37 - INFO - trainer -     Batch size = 10
+12/19/2022 17:33:37 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 17:33:37 - INFO - trainer -   {'BLUE': 0.09616548166817632}
+12/19/2022 17:33:37 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:34:32 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+12/19/2022 17:34:32 - INFO - trainer -     Num examples = 1015
+12/19/2022 17:34:32 - INFO - trainer -     Batch size = 10
+12/19/2022 17:34:35 - INFO - trainer -   Epoch: 5, Train loss: 2.141, Val loss: 2.062, Epoch time = 178.940s
+12/19/2022 17:34:35 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:34:36 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:35:36 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 17:35:36 - INFO - trainer -     Num examples = 1000
+12/19/2022 17:35:36 - INFO - trainer -     Batch size = 10
+12/19/2022 17:35:36 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 17:35:37 - INFO - trainer -   {'BLUE': 0.17697711288928986}
+12/19/2022 17:35:37 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:36:36 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 17:36:36 - INFO - trainer -     Num examples = 1000
+12/19/2022 17:36:36 - INFO - trainer -     Batch size = 10
+12/19/2022 17:36:36 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 17:36:37 - INFO - trainer -   {'BLUE': 0.3436546325683594}
+12/19/2022 17:36:37 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:37:31 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+12/19/2022 17:37:31 - INFO - trainer -     Num examples = 1015
+12/19/2022 17:37:31 - INFO - trainer -     Batch size = 10
+12/19/2022 17:37:32 - INFO - trainer -   Epoch: 6, Train loss: 2.018, Val loss: 1.960, Epoch time = 175.306s
+12/19/2022 17:37:33 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:37:33 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:38:34 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 17:38:34 - INFO - trainer -     Num examples = 1000
+12/19/2022 17:38:34 - INFO - trainer -     Batch size = 10
+12/19/2022 17:38:34 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 17:38:34 - INFO - trainer -   {'BLUE': 0.18244544763605414}
+12/19/2022 17:38:34 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:39:34 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 17:39:34 - INFO - trainer -     Num examples = 1000
+12/19/2022 17:39:34 - INFO - trainer -     Batch size = 10
+12/19/2022 17:39:34 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 17:39:34 - INFO - trainer -   {'BLUE': 0.0}
+12/19/2022 17:39:35 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:40:28 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+12/19/2022 17:40:28 - INFO - trainer -     Num examples = 1015
+12/19/2022 17:40:28 - INFO - trainer -     Batch size = 10
+12/19/2022 17:40:30 - INFO - trainer -   Epoch: 7, Train loss: 1.923, Val loss: 1.883, Epoch time = 175.563s
+12/19/2022 17:40:30 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:40:31 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:41:31 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 17:41:31 - INFO - trainer -     Num examples = 1000
+12/19/2022 17:41:31 - INFO - trainer -     Batch size = 10
+12/19/2022 17:41:31 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 17:41:31 - INFO - trainer -   {'BLUE': 0.19239990288938852}
+12/19/2022 17:41:32 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:42:31 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 17:42:31 - INFO - trainer -     Num examples = 1000
+12/19/2022 17:42:31 - INFO - trainer -     Batch size = 10
+12/19/2022 17:42:31 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 17:42:31 - INFO - trainer -   {'BLUE': 0.1779288947582245}
+12/19/2022 17:42:32 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:43:25 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+12/19/2022 17:43:25 - INFO - trainer -     Num examples = 1015
+12/19/2022 17:43:25 - INFO - trainer -     Batch size = 10
+12/19/2022 17:43:27 - INFO - trainer -   Epoch: 8, Train loss: 1.840, Val loss: 1.811, Epoch time = 175.147s
+12/19/2022 17:43:27 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:43:28 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:44:28 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 17:44:28 - INFO - trainer -     Num examples = 1000
+12/19/2022 17:44:28 - INFO - trainer -     Batch size = 10
+12/19/2022 17:44:28 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 17:44:28 - INFO - trainer -   {'BLUE': 0.26843559741973877}
+12/19/2022 17:44:29 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:45:28 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 17:45:28 - INFO - trainer -     Num examples = 1000
+12/19/2022 17:45:28 - INFO - trainer -     Batch size = 10
+12/19/2022 17:45:28 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 17:45:28 - INFO - trainer -   {'BLUE': 0.2724820375442505}
+12/19/2022 17:45:29 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:46:24 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+12/19/2022 17:46:24 - INFO - trainer -     Num examples = 1015
+12/19/2022 17:46:24 - INFO - trainer -     Batch size = 10
+12/19/2022 17:46:26 - INFO - trainer -   Epoch: 9, Train loss: 1.772, Val loss: 1.754, Epoch time = 177.110s
+12/19/2022 17:46:26 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:46:27 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:47:27 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 17:47:27 - INFO - trainer -     Num examples = 1000
+12/19/2022 17:47:27 - INFO - trainer -     Batch size = 10
+12/19/2022 17:47:27 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 17:47:28 - INFO - trainer -   {'BLUE': 0.13003317057580885}
+12/19/2022 17:47:28 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:48:28 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 17:48:28 - INFO - trainer -     Num examples = 1000
+12/19/2022 17:48:28 - INFO - trainer -     Batch size = 10
+12/19/2022 17:48:28 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 17:48:28 - INFO - trainer -   {'BLUE': 0.3105059266090393}
+12/19/2022 17:48:28 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:49:22 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+12/19/2022 17:49:22 - INFO - trainer -     Num examples = 1015
+12/19/2022 17:49:22 - INFO - trainer -     Batch size = 10
+12/19/2022 17:49:23 - INFO - trainer -   Epoch: 10, Train loss: 1.707, Val loss: 1.709, Epoch time = 175.568s
+12/19/2022 17:49:24 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:56:08 - INFO - trainer -   ***** Running training *****
+12/19/2022 17:56:08 - INFO - trainer -     Num examples = 29001
+12/19/2022 17:56:08 - INFO - trainer -     Num Epochs = 10
+12/19/2022 17:56:08 - INFO - trainer -     Total train batch size = 10
+12/19/2022 17:56:08 - INFO - trainer -     warmup steps = 1000
+12/19/2022 17:56:08 - INFO - trainer -     Total optimization steps = 290010
+12/19/2022 17:56:08 - INFO - trainer -     Save steps = 1000
+12/19/2022 17:56:10 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 17:57:16 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 17:57:16 - INFO - trainer -     Num examples = 1000
+12/19/2022 17:57:16 - INFO - trainer -     Batch size = 10
+12/19/2022 17:57:16 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 18:11:12 - INFO - trainer -   ***** Running training *****
+12/19/2022 18:11:12 - INFO - trainer -     Num examples = 29001
+12/19/2022 18:11:12 - INFO - trainer -     Num Epochs = 10
+12/19/2022 18:11:12 - INFO - trainer -     Total train batch size = 10
+12/19/2022 18:11:12 - INFO - trainer -     warmup steps = 1000
+12/19/2022 18:11:12 - INFO - trainer -     Total optimization steps = 290010
+12/19/2022 18:11:12 - INFO - trainer -     Save steps = 1000
+12/19/2022 18:11:14 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:12:20 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 18:12:20 - INFO - trainer -     Num examples = 1000
+12/19/2022 18:12:20 - INFO - trainer -     Batch size = 10
+12/19/2022 18:12:20 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 18:12:20 - INFO - trainer -   {'BLUE': 0.03629128893982886}
+12/19/2022 18:12:20 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:13:26 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 18:13:26 - INFO - trainer -     Num examples = 1000
+12/19/2022 18:13:26 - INFO - trainer -     Batch size = 10
+12/19/2022 18:13:26 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 18:13:27 - INFO - trainer -   {'BLUE': 0.0}
+12/19/2022 18:13:27 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:14:27 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+12/19/2022 18:14:27 - INFO - trainer -     Num examples = 1015
+12/19/2022 18:14:27 - INFO - trainer -     Batch size = 10
+12/19/2022 18:14:29 - INFO - trainer -   Epoch: 1, Train loss: 4.383, Val loss: 2.942, Epoch time = 195.348s
+12/19/2022 18:14:29 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:14:30 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:15:39 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 18:15:39 - INFO - trainer -     Num examples = 1000
+12/19/2022 18:15:39 - INFO - trainer -     Batch size = 10
+12/19/2022 18:15:39 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 18:15:39 - INFO - trainer -   {'BLUE': 0.04760259762406349}
+12/19/2022 18:15:39 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:16:47 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 18:16:47 - INFO - trainer -     Num examples = 1000
+12/19/2022 18:16:47 - INFO - trainer -     Batch size = 10
+12/19/2022 18:16:47 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 18:16:47 - INFO - trainer -   {'BLUE': 0.09205098450183868}
+12/19/2022 18:16:47 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:17:48 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+12/19/2022 18:17:48 - INFO - trainer -     Num examples = 1015
+12/19/2022 18:17:48 - INFO - trainer -     Batch size = 10
+12/19/2022 18:17:50 - INFO - trainer -   Epoch: 2, Train loss: 2.735, Val loss: 2.518, Epoch time = 198.947s
+12/19/2022 18:17:51 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:17:51 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:19:00 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 18:19:00 - INFO - trainer -     Num examples = 1000
+12/19/2022 18:19:00 - INFO - trainer -     Batch size = 10
+12/19/2022 18:19:00 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 18:19:00 - INFO - trainer -   {'BLUE': 0.17450538277626038}
+12/19/2022 18:19:01 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:20:09 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 18:20:09 - INFO - trainer -     Num examples = 1000
+12/19/2022 18:20:09 - INFO - trainer -     Batch size = 10
+12/19/2022 18:20:09 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 18:20:09 - INFO - trainer -   {'BLUE': 0.10591955985032639}
+12/19/2022 18:20:10 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:21:11 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+12/19/2022 18:21:11 - INFO - trainer -     Num examples = 1015
+12/19/2022 18:21:11 - INFO - trainer -     Batch size = 10
+12/19/2022 18:21:12 - INFO - trainer -   Epoch: 3, Train loss: 2.419, Val loss: 2.280, Epoch time = 199.999s
+12/19/2022 18:21:13 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:21:13 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:22:23 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 18:22:23 - INFO - trainer -     Num examples = 1000
+12/19/2022 18:22:23 - INFO - trainer -     Batch size = 10
+12/19/2022 18:22:23 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 18:22:23 - INFO - trainer -   {'BLUE': 0.10173977166414261}
+12/19/2022 18:22:24 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:23:31 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 18:23:31 - INFO - trainer -     Num examples = 1000
+12/19/2022 18:23:31 - INFO - trainer -     Batch size = 10
+12/19/2022 18:23:31 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 18:23:31 - INFO - trainer -   {'BLUE': 0.15726234018802643}
+12/19/2022 18:23:32 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:24:33 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+12/19/2022 18:24:33 - INFO - trainer -     Num examples = 1015
+12/19/2022 18:24:33 - INFO - trainer -     Batch size = 10
+12/19/2022 18:24:35 - INFO - trainer -   Epoch: 4, Train loss: 2.224, Val loss: 2.110, Epoch time = 200.173s
+12/19/2022 18:24:35 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:24:36 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:25:45 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 18:25:45 - INFO - trainer -     Num examples = 1000
+12/19/2022 18:25:45 - INFO - trainer -     Batch size = 10
+12/19/2022 18:25:45 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 18:25:45 - INFO - trainer -   {'BLUE': 0.2520761653580855}
+12/19/2022 18:25:46 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:26:54 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 18:26:54 - INFO - trainer -     Num examples = 1000
+12/19/2022 18:26:54 - INFO - trainer -     Batch size = 10
+12/19/2022 18:26:54 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 18:26:54 - INFO - trainer -   {'BLUE': 0.2796240331979862}
+12/19/2022 18:26:54 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:27:56 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+12/19/2022 18:27:56 - INFO - trainer -     Num examples = 1015
+12/19/2022 18:27:56 - INFO - trainer -     Batch size = 10
+12/19/2022 18:27:58 - INFO - trainer -   Epoch: 5, Train loss: 2.063, Val loss: 1.981, Epoch time = 200.541s
+12/19/2022 18:27:58 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:27:59 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:29:08 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 18:29:08 - INFO - trainer -     Num examples = 1000
+12/19/2022 18:29:08 - INFO - trainer -     Batch size = 10
+12/19/2022 18:29:08 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 18:29:08 - INFO - trainer -   {'BLUE': 0.30268827080726624}
+12/19/2022 18:29:09 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:30:17 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 18:30:17 - INFO - trainer -     Num examples = 1000
+12/19/2022 18:30:17 - INFO - trainer -     Batch size = 10
+12/19/2022 18:30:17 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 18:30:17 - INFO - trainer -   {'BLUE': 0.19312508404254913}
+12/19/2022 18:30:18 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:31:19 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+12/19/2022 18:31:19 - INFO - trainer -     Num examples = 1015
+12/19/2022 18:31:19 - INFO - trainer -     Batch size = 10
+12/19/2022 18:31:21 - INFO - trainer -   Epoch: 6, Train loss: 1.943, Val loss: 1.884, Epoch time = 201.170s
+12/19/2022 18:31:22 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:31:22 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:32:32 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 18:32:32 - INFO - trainer -     Num examples = 1000
+12/19/2022 18:32:32 - INFO - trainer -     Batch size = 10
+12/19/2022 18:32:32 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 18:32:32 - INFO - trainer -   {'BLUE': 0.31436940420646764}
+12/19/2022 18:32:33 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:33:41 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 18:33:41 - INFO - trainer -     Num examples = 1000
+12/19/2022 18:33:41 - INFO - trainer -     Batch size = 10
+12/19/2022 18:33:41 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 18:33:41 - INFO - trainer -   {'BLUE': 0.2973425090312958}
+12/19/2022 18:33:41 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:34:43 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+12/19/2022 18:34:43 - INFO - trainer -     Num examples = 1015
+12/19/2022 18:34:43 - INFO - trainer -     Batch size = 10
+12/19/2022 18:34:45 - INFO - trainer -   Epoch: 7, Train loss: 1.850, Val loss: 1.804, Epoch time = 201.260s
+12/19/2022 18:34:45 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:34:46 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:35:56 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 18:35:56 - INFO - trainer -     Num examples = 1000
+12/19/2022 18:35:56 - INFO - trainer -     Batch size = 10
+12/19/2022 18:35:56 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 18:35:56 - INFO - trainer -   {'BLUE': 0.2836131751537323}
+12/19/2022 18:35:57 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:37:05 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 18:37:05 - INFO - trainer -     Num examples = 1000
+12/19/2022 18:37:05 - INFO - trainer -     Batch size = 10
+12/19/2022 18:37:05 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 18:37:05 - INFO - trainer -   {'BLUE': 0.28802353143692017}
+12/19/2022 18:37:06 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:38:07 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+12/19/2022 18:38:07 - INFO - trainer -     Num examples = 1015
+12/19/2022 18:38:07 - INFO - trainer -     Batch size = 10
+12/19/2022 18:38:09 - INFO - trainer -   Epoch: 8, Train loss: 1.768, Val loss: 1.740, Epoch time = 201.778s
+12/19/2022 18:38:09 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:38:10 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:39:20 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 18:39:20 - INFO - trainer -     Num examples = 1000
+12/19/2022 18:39:20 - INFO - trainer -     Batch size = 10
+12/19/2022 18:39:20 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 18:39:20 - INFO - trainer -   {'BLUE': 0.2406777672536394}
+12/19/2022 18:39:20 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:40:29 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 18:40:29 - INFO - trainer -     Num examples = 1000
+12/19/2022 18:40:29 - INFO - trainer -     Batch size = 10
+12/19/2022 18:40:29 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 18:40:29 - INFO - trainer -   {'BLUE': 0.32225319743156433}
+12/19/2022 18:40:30 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:41:31 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+12/19/2022 18:41:31 - INFO - trainer -     Num examples = 1015
+12/19/2022 18:41:31 - INFO - trainer -     Batch size = 10
+12/19/2022 18:41:33 - INFO - trainer -   Epoch: 9, Train loss: 1.697, Val loss: 1.687, Epoch time = 201.849s
+12/19/2022 18:41:33 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:41:34 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:42:46 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 18:42:46 - INFO - trainer -     Num examples = 1000
+12/19/2022 18:42:46 - INFO - trainer -     Batch size = 10
+12/19/2022 18:42:46 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 18:42:46 - INFO - trainer -   {'BLUE': 0.22532913088798523}
+12/19/2022 18:42:46 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:43:55 - INFO - trainer -   ***** Running prediction on test dataset *****
+12/19/2022 18:43:55 - INFO - trainer -     Num examples = 1000
+12/19/2022 18:43:55 - INFO - trainer -     Batch size = 10
+12/19/2022 18:43:55 - INFO - trainer -     Search strategy = greedy search
+12/19/2022 18:43:55 - INFO - trainer -   {'BLUE': 0.250498609167567}
+12/19/2022 18:43:56 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/19/2022 18:44:57 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+12/19/2022 18:44:57 - INFO - trainer -     Num examples = 1015
+12/19/2022 18:44:57 - INFO - trainer -     Batch size = 10
+12/19/2022 18:44:59 - INFO - trainer -   Epoch: 10, Train loss: 1.630, Val loss: 1.642, Epoch time = 203.533s
+12/19/2022 18:44:59 - INFO - trainer -   Saving model checkpoint to output_dir\de-en

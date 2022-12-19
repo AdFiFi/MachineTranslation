@@ -18,9 +18,9 @@ class TransformerConfig:
                  activation='gelu',
                  dropout=0.1,
                  output_attention=False,
-                 pad_token_id=1,
-                 bos_token_id=0,
-                 eos_token_id=2,
+                 pad_token_id=0,
+                 bos_token_id=2,
+                 eos_token_id=3,
                  ):
         self.enc_vocab_size = enc_vocab_size
         self.dec_vocab_size = dec_vocab_size

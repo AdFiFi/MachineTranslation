@@ -185,7 +185,10 @@ class Trainer(object):
                 tgt_out = tgt_ids[:, 1:]
                 enc_padding_mask, dec_padding_mask = create_mask(enc_ids, dec_ids, self.device)
 
-                dec_ids, logits = self.model.greedy_generate(enc_ids, enc_padding_mask, dec_ids)
+                if self.args.do_parallel:
+                    dec_ids, logits = self.model.module.greedy_generate(enc_ids, enc_padding_mask, dec_ids)
+                else:
+                    dec_ids, logits = self.model.greedy_generate(enc_ids, enc_padding_mask, dec_ids)
                 # loss = self.loss_fn(logits.reshape(-1, logits.shape[-1]), tgt_out.reshape(-1))
                 # losses += loss.item()
                 # loss_list.append(loss.item())
@@ -209,10 +212,9 @@ class Trainer(object):
             "BLUE": blue
         }
         logger.info(f"{results}")
-        if mode == 'single':
-            text = '\n\n'.join([t + '\n' + g for t, g in zip(text_target_list, text_generation_list)])
-            with open('./test.txt', mode='w', encoding='utf-8') as f:
-                f.write(text)
+        text = '\n\n'.join([t + '\n' + g for t, g in zip(text_target_list, text_generation_list)])
+        with open('./test.txt', mode='w', encoding='utf-8') as f:
+            f.write(text)
         return results
 
     def save_model(self):

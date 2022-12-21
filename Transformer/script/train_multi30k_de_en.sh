@@ -2,6 +2,7 @@ export PYTHONUNBUFFERED=1
 
 cd ../
 python  main.py \
+--datasets "Multi30k" \
 --log_dir "./log_dir" \
 --datasets "Multi30k" \
 --data_dir "./data" \
@@ -30,6 +31,7 @@ python  main.py \
 --schedule 'linear' \
 --warmup_steps 1000 \
 --save_steps 1000 \
+--test_steps 2000 \
 --epsilon_ls 0.1 \
 \
 --do_evaluate \

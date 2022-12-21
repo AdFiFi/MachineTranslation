@@ -3,6 +3,7 @@ import argparse
 from trainer import Trainer
 from utils import *
 
+os.environ['CUDA_VISIBLE_DEVICES'] = "0,2"
 logger = logging.getLogger(__name__)
 
 
@@ -20,7 +21,6 @@ def main(args):
             init_logger(f'{args.log_dir}/test.log')
             trainer.load_model()
             trainer.test()
-
     pass
 
 
@@ -31,7 +31,7 @@ if __name__ == '__main__':
     global_group.add_argument("--log_dir", default="./log_dir", type=str, help="")
 
     data_group = parser.add_argument_group(title="data", description="")
-    data_group.add_argument("--datasets", default='Multi30k', type=str, help="")
+    data_group.add_argument("--datasets", default='wmt14', type=str, help="")
     data_group.add_argument("--data_dir", default="./data", type=str, help="")
     data_group.add_argument("--src_language", default="de", type=str, help="")
     data_group.add_argument("--tgt_language", default="en", type=str, help="")
@@ -52,7 +52,7 @@ if __name__ == '__main__':
     train_group.add_argument("--do_parallel", action="store_true", help="")
     train_group.add_argument("--device", default="cuda", type=str, help="")
     train_group.add_argument("--train_batch_size", default=128, type=int, help="")
-    train_group.add_argument("--num_epochs", default=4, type=int, help="")
+    train_group.add_argument("--num_epochs", default=3, type=int, help="")
     train_group.add_argument("--learning_rate", default=1e-5, type=float, help="")
     train_group.add_argument("--beta1", default=0.9, type=float, help="")
     train_group.add_argument("--beta2", default=0.98, type=float, help="")

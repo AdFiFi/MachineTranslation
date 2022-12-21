@@ -24,7 +24,7 @@ def get_Multi30k_datadict(src_language, tgt_language):
 
 
 if __name__ == '__main__':
-    wmt14_de_en = load_dataset('wmt14', 'de-en')
-    # wmt14_fr_en = load_dataset('wmt14', 'fr-en').
+    wmt14_fr_en = load_dataset('wmt14', 'de-en')
+    # wmt14_fr_en = load_dataset('wmt14', 'fr-en')
 
     # multi = get_Multi30k_datadict('de', 'en')

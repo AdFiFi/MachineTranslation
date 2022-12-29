@@ -2,15 +2,15 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from .Attention import FullAttention, AttentionLayer
-from utils import triangular_causal_mask, mask_expand
+from .Attention import TemporalAttention, TemporalAttentionLayer
+from utils import triangular_causal_mask, temporal_mask_expand, spatial_mask_expand
 
 
 class TransformerEncoderLayer(nn.Module):
     def __init__(self, config):
         super(TransformerEncoderLayer, self).__init__()
-        self.attention = AttentionLayer(
-            FullAttention(attention_dropout=config.dropout, output_attention=config.output_attention),
+        self.attention = TemporalAttentionLayer(
+            TemporalAttention(attention_dropout=config.dropout, output_attention=config.output_attention),
             config.d_model, config.num_heads)
         self.linear1 = nn.Linear(config.d_model, config.dim_feedforward)
         self.linear2 = nn.Linear(config.dim_feedforward, config.d_model)
@@ -43,7 +43,7 @@ class TransformerEncoder(nn.Module):
     def forward(self, enc_embeds, padding_mask=None, attn_mask=None):
         if padding_mask is not None:
             if attn_mask is None:
-                attn_mask = mask_expand(padding_mask)
+                attn_mask = temporal_mask_expand(padding_mask)
 
         # x [B, L, D]
         attns = []
@@ -62,11 +62,11 @@ class TransformerEncoder(nn.Module):
 class TransformerDecoderLayer(nn.Module):
     def __init__(self, config):
         super(TransformerDecoderLayer, self).__init__()
-        self.self_attention = AttentionLayer(
-            FullAttention(attention_dropout=config.dropout, output_attention=False),
+        self.self_attention = TemporalAttentionLayer(
+            TemporalAttention(attention_dropout=config.dropout, output_attention=False),
             config.d_model, config.num_heads)
-        self.cross_attention = AttentionLayer(
-            FullAttention(attention_dropout=config.dropout, output_attention=False),
+        self.cross_attention = TemporalAttentionLayer(
+            TemporalAttention(attention_dropout=config.dropout, output_attention=False),
             config.d_model, config.num_heads)
         self.linear1 = nn.Linear(config.d_model, config.dim_feedforward)
         self.linear2 = nn.Linear(config.dim_feedforward, config.d_model)
@@ -107,7 +107,7 @@ class TransformerDecoder(nn.Module):
             B, L, _ = dec_embeds.shape
             attn_mask = triangular_causal_mask(B, L, device=dec_embeds.device)
             if padding_mask is not None:
-                attn_mask += mask_expand(padding_mask)
+                attn_mask += temporal_mask_expand(padding_mask)
         decoding = dec_embeds
 
         for layer in self.layers:

@@ -39,7 +39,7 @@ if __name__ == '__main__':
 
     model_group = parser.add_argument_group(title="model", description="")
     model_group.add_argument("--d_model", default=512, type=int, help="")
-    model_group.add_argument("--num_heads", default=16, type=int, help="")
+    model_group.add_argument("--num_heads", default=8, type=int, help="")
     model_group.add_argument("--dim_feedforward", default=2048, type=int, help="")
     model_group.add_argument("--num_encoder_layers", default=6, type=int, help="")
     model_group.add_argument("--num_decoder_layers", default=6, type=int, help="")

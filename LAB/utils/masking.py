@@ -15,10 +15,16 @@ def triangular_causal_mask(B, L, device="cpu"):
     return mask
 
 
-def mask_expand(mask: torch.Tensor, tgt_len=None):
+def temporal_mask_expand(mask: torch.Tensor, tgt_len=None):
     bsz, src_len = mask.size()
     tgt_len = tgt_len if tgt_len is not None else src_len
 
     expanded_mask = mask[:, None, None, :].expand(bsz, 1, tgt_len, src_len)
 
+    return expanded_mask
+
+
+def spatial_mask_expand(mask: torch.Tensor, d_model):
+    bsz, src_len = mask.size()
+    expanded_mask = mask[:, :, None].expand(bsz, src_len, d_model)
     return expanded_mask

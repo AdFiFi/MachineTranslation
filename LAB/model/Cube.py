@@ -11,7 +11,8 @@ class CubeConfig:
                  dec_vocab_size=20000,
                  max_seq_len=256,
                  d_model=512,
-                 num_heads=8,
+                 num_t_heads=8,
+                 num_s_heads=1,
                  dim_feedforward=512,
                  num_encoder_layers=3,
                  num_decoder_layers=3,
@@ -26,7 +27,8 @@ class CubeConfig:
         self.dec_vocab_size = dec_vocab_size
         self.max_seq_len = max_seq_len
         self.d_model = d_model
-        self.num_heads = num_heads
+        self.num_t_heads = num_t_heads
+        self.num_s_heads = num_s_heads
         self.dim_feedforward = dim_feedforward
         self.num_encoder_layers = num_encoder_layers
         self.num_decoder_layers = num_decoder_layers
@@ -62,7 +64,7 @@ class Cube(nn.Module):
             enc_embeds = self.enc_embedding(enc_ids)
             enc_encoding, attns = self.encoder(enc_embeds,
                                                padding_mask=enc_padding_mask,
-                                               attn_mask=enc_attn_mask)
+                                               temporal_mask=enc_attn_mask)
 
         dec_embeds = self.dec_embedding(dec_ids)
         dec_out = self.decoder(dec_embeds, enc_encoding,

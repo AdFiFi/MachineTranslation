@@ -5609,3 +5609,39 @@
 12/19/2022 18:44:57 - INFO - trainer -     Batch size = 10
 12/19/2022 18:44:59 - INFO - trainer -   Epoch: 10, Train loss: 1.630, Val loss: 1.642, Epoch time = 203.533s
 12/19/2022 18:44:59 - INFO - trainer -   Saving model checkpoint to output_dir\de-en
+12/22/2022 11:12:27 - INFO - trainer -   ***** Running training *****
+12/22/2022 11:12:27 - INFO - trainer -     Num examples = 29001
+12/22/2022 11:12:27 - INFO - trainer -     Num Epochs = 4
+12/22/2022 11:12:27 - INFO - trainer -     Total train batch size = 2
+12/22/2022 11:12:27 - INFO - trainer -     warmup steps = 4000
+12/22/2022 11:12:27 - INFO - trainer -     Total optimization steps = 116004
+12/22/2022 11:12:27 - INFO - trainer -     Save steps = 4000
+12/30/2022 00:43:59 - INFO - trainer -   ***** Running training *****
+12/30/2022 00:43:59 - INFO - trainer -     Num examples = 29001
+12/30/2022 00:43:59 - INFO - trainer -     Num Epochs = 4
+12/30/2022 00:43:59 - INFO - trainer -     Total train batch size = 2
+12/30/2022 00:43:59 - INFO - trainer -     warmup steps = 4000
+12/30/2022 00:43:59 - INFO - trainer -     Total optimization steps = 116004
+12/30/2022 00:43:59 - INFO - trainer -     Save steps = 4000
+12/30/2022 00:56:38 - INFO - trainer -   ***** Running training *****
+12/30/2022 00:56:38 - INFO - trainer -     Num examples = 29001
+12/30/2022 00:56:38 - INFO - trainer -     Num Epochs = 4
+12/30/2022 00:56:38 - INFO - trainer -     Total train batch size = 2
+12/30/2022 00:56:38 - INFO - trainer -     warmup steps = 4000
+12/30/2022 00:56:38 - INFO - trainer -     Total optimization steps = 116004
+12/30/2022 00:56:38 - INFO - trainer -     Save steps = 4000
+12/30/2022 00:59:37 - INFO - trainer -   ***** Running training *****
+12/30/2022 00:59:37 - INFO - trainer -     Num examples = 29001
+12/30/2022 00:59:37 - INFO - trainer -     Num Epochs = 4
+12/30/2022 00:59:37 - INFO - trainer -     Total train batch size = 2
+12/30/2022 00:59:37 - INFO - trainer -     warmup steps = 4000
+12/30/2022 00:59:37 - INFO - trainer -     Total optimization steps = 116004
+12/30/2022 00:59:37 - INFO - trainer -     Save steps = 4000
+12/30/2022 01:00:01 - INFO - trainer -   ***** Running training *****
+12/30/2022 01:00:01 - INFO - trainer -     Num examples = 29001
+12/30/2022 01:00:01 - INFO - trainer -     Num Epochs = 4
+12/30/2022 01:00:01 - INFO - trainer -     Total train batch size = 2
+12/30/2022 01:00:01 - INFO - trainer -     warmup steps = 4000
+12/30/2022 01:00:01 - INFO - trainer -     Total optimization steps = 116004
+12/30/2022 01:00:01 - INFO - trainer -     Save steps = 4000
+12/30/2022 01:00:03 - INFO - trainer -   Saving model checkpoint to output_dir\de-en

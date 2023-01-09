@@ -1,47 +1,5 @@
-from torchtext.data.utils import get_tokenizer
-from torchtext.vocab import build_vocab_from_iterator
-from torchtext.datasets import multi30k, Multi30k
-from typing import Iterable, List
+from torchtext.data.metrics import bleu_score
 
-SRC_LANGUAGE = 'de'
-TGT_LANGUAGE = 'en'
-
-# Place-holders
-token_transform = {}
-vocab_transform = {}
-
-# Create source and target language tokenizer. Make sure to install the dependencies.
-# pip install -U torchdata
-# pip install -U spacy
-# python -m spacy download en_core_web_sm
-# python -m spacy download de_core_news_sm
-token_transform[SRC_LANGUAGE] = get_tokenizer('spacy', language='de_core_news_md')
-token_transform[TGT_LANGUAGE] = get_tokenizer('spacy', language='en_core_web_md')
-
-
-# helper function to yield list of tokens
-def yield_tokens(data_iter: Iterable, language: str) -> List[str]:
-    language_index = {SRC_LANGUAGE: 0, TGT_LANGUAGE: 1}
-
-    for data_sample in data_iter:
-        yield token_transform[language](data_sample[language_index[language]])
-
-
-# Define special symbols and indices
-UNK_IDX, PAD_IDX, BOS_IDX, EOS_IDX = 0, 1, 2, 3
-# Make sure the tokens are in order of their indices to properly insert them in vocab
-special_symbols = ['<unk>', '<pad>', '<bos>', '<eos>']
-
-for ln in [SRC_LANGUAGE, TGT_LANGUAGE]:
-    # Training data Iterator
-    train_iter = Multi30k(split='test', language_pair=(SRC_LANGUAGE, TGT_LANGUAGE))
-    # Create torchtext's Vocab object
-    vocab_transform[ln] = build_vocab_from_iterator(yield_tokens(train_iter, ln),
-                                                    min_freq=1,
-                                                    specials=special_symbols,
-                                                    special_first=True)
-
-# Set UNK_IDX as the default index. This index is returned when the token is not found.
-# If not set, it throws RuntimeError when the queried token is not found in the Vocabulary.
-for ln in [SRC_LANGUAGE, TGT_LANGUAGE]:
-    vocab_transform[ln].set_default_index(UNK_IDX)
+candidate_corpus = [['Theory', 'is', 'the', 'one', '.'], ['In', 'the', 'last', 'two', 'years', 'I', 'have', 'not', 'prepared', 'to', 'speak', 'of', 'my', 'own', 'apartment', 'from', 'the', 'apartment', ',', 'and', 'it', 'will', 'not', 'be', 'doing', 'this', 'year', '.'], ['The', 'hotel', 'is', 'also', 'a', 'great', 'place', 'for', 'the', 'guests', '.'], ['And', ':', '"', 'In', 'our', 'society', 'there', 'is', 'no', 'one', 'of', 'the', 'most', 'of', 'our', 'society', ',', 'we', 'have', 'a', 'full', '-', 'of', '-', 'a', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'], ['Yesterday', ',', 'Obama', 'has', 'his', 'fourth', 'promises', '.'], ['I', 'am', 'determined', 'to', 'trust', 'your', 'trust', '.'], ['The', 'FAA', 'A', 'restrictions', 'for', 'the', 'use', 'of', 'the', 'devices', 'in', 'aircraft', '–', 'even', 'if', 'the', 'phone', 'phone', 'is', 'still', 'in', 'the', 'phone', 'with', 'the', 'phone', '.'], ['He', 'was', 'himself', 'and', 'worked', 'as', 'a', 'result', 'of', 'the', 'work', 'in', 'the', 'Central', 'Central', 'in', 'South', 'Africa', '.'], ['In', 'a', 'interview', 'with', 'US', '-', 'US', 'Kashmir', ',', 'the', 'Friday', 'of', 'Friday', '(', 'Friday', ')', 'should', 'be', 'called', '"', 'Bloom', '"', 'that', 'does', 'not', 'exactly', 'what', 'we', 'are', 'doing', 'as', 'we', 'hope', 'it', 'will', 'be', '.'], ['The', 'committee', ',', 'he', 'would', 'not', 'accept', 'the', 'statements', 'of', 'employees', ',', 'who', 'did', 'not', 'accept', 'that', 'they', 'would', 'have', 'been', 'able', 'to', 'withdraw', 'their', 'duties', '.']]
+references_corpus = [[['However', ',', 'theoretically', ',', 'it', 'is', 'possible', '.']], [['I', 'haven', "'", 't', 'signed', 'up', 'for', 'the', 'past', 'two', 'years', 'to', 'give', 'out', 'candy', 'in', 'my', 'apartment', 'and', 'probably', 'won', "'", 't', 'this', 'year', '.']], [['This', 'and', 'another', 'bedroom', 'were', 'completely', 'burnt', 'out', '.']], [['And', ':', '"', 'In', 'our', 'society', 'we', 'have', 'no', 'major', 'crimes', ',', 'but', 'we', 'do', 'have', 'a', 'detention', 'camp', 'full', 'of', 'would', '-', 'be', 'criminals', '"', '.', 'They', 'read', 'time', 'streams', '.']], [['Yesterday', ',', 'Obama', 'tweaked', 'his', 'original', 'pledge', '.']], [['I', 'am', 'eager', 'to', 'earn', 'your', 'confidence', 'back', '.']], [['The', 'FAA', 'is', 'easing', 'restrictions', 'on', 'the', 'use', 'of', 'electronic', 'gadgets', 'on', 'airplanes', '-', 'though', 'chatting', 'on', 'cellphones', 'will', 'still', 'be', 'prohibited', '.']], [['He', 'became', 'a', 'doctor', 'himself', ',', 'working', 'as', 'a', 'vascular', 'surgeon', 'in', 'Yaounde', "'", 's', 'Central', 'Hospital', '.']], [['In', 'an', 'interview', 'with', 'US', 'journalist', 'Katie', 'Couric', ',', 'which', 'is', 'to', 'be', 'broadcast', 'on', 'Friday', '(', 'local', 'time', ')', ',', 'Bloom', 'said', ',', '"', 'sometimes', 'life', 'doesn', "'", 't', 'go', 'exactly', 'as', 'we', 'plan', 'or', 'hope', 'for', '"', '.']], [['The', 'CEO', 'said', 'he', 'did', 'not', 'accept', 'staff', "'", 's', 'evidence', 'that', 'they', 'were', 'uncomfortable', 'with', 'reporting', 'upwards', 'to', 'their', 'managers', '.']]]
+bleu_score(candidate_corpus, references_corpus)

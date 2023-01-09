@@ -3,13 +3,14 @@ import argparse
 from trainer import Trainer
 from utils import *
 
+os.environ['CUDA_VISIBLE_DEVICES'] = "1,3"
 logger = logging.getLogger(__name__)
 
 
 def main(args):
     trainer = Trainer(args)
     if args.do_train:
-        init_logger(f'{args.log_dir}/train.log')
+        init_logger(f'{args.log_dir}/train_{args.model}_{args.task}.log')
         trainer.train()
     else:
         if args.do_evaluate:
@@ -29,6 +30,8 @@ if __name__ == '__main__':
 
     global_group = parser.add_argument_group(title="global", description="")
     global_group.add_argument("--log_dir", default="./log_dir", type=str, help="")
+    global_group.add_argument("--task", default="multi30k_de_en", type=str, help="")
+    global_group.add_argument("--model", default="Transformer", type=str, help="")
 
     data_group = parser.add_argument_group(title="data", description="")
     data_group.add_argument("--datasets", default='Multi30k', type=str, help="")

@@ -48,9 +48,9 @@ class Transformer(nn.Module):
         self.enc_embedding = DataEmbedding(config.enc_vocab_size, config.d_model, config.dropout)
         self.dec_embedding = DataEmbedding(config.dec_vocab_size, config.d_model, config.dropout)
         # Encoder
-        self.encoder = Encoder(config)
+        self.encoder = TransformerEncoder(config)
         # Decoder
-        self.decoder = Decoder(config)
+        self.decoder = TransformerDecoder(config)
 
         # self.init_parameters()
 

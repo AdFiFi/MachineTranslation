@@ -3,6 +3,8 @@ cd ../
 python  main.py \
 --datasets "wmt14" \
 --log_dir "./log_dir" \
+--model "./Stack" \
+--task "./wmt14_de_en" \
 --data_dir "./data" \
 --src_language "de" \
 --tgt_language "en" \
@@ -20,7 +22,7 @@ python  main.py \
 --do_train \
 --do_parallel \
 --train_batch_size 128 \
---num_epochs 3 \
+--num_epochs 10 \
 --learning_rate 1e-5 \
 --beta1 0.9 \
 --beta2 0.98 \
@@ -33,5 +35,4 @@ python  main.py \
 \
 --do_evaluate \
 --evaluate_batch_size 128 \
---alpha 0.6 \
-> ./out.log
+--alpha 0.6

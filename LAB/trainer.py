@@ -8,7 +8,7 @@ from datasets import load_dataset
 from torch.utils.data import DataLoader, RandomSampler
 from torchtext.data.metrics import bleu_score
 
-from model import Cube, CubeConfig
+from model import *
 from utils import *
 from data import *
 
@@ -23,21 +23,20 @@ class Trainer(object):
         self.device = 'cuda' if args.device != 'cpu' and torch.cuda.is_available() else args.device
         self.tokenizer = SharedTokenizer(args.src_language, args.tgt_language).load(os.path.join(args.model_dir, self.task))
 
-        self.model_config = CubeConfig(enc_vocab_size=self.tokenizer.get_vocab_size(),
-                                       dec_vocab_size=self.tokenizer.get_vocab_size(),
-                                       max_seq_len=args.max_seq_len,
-                                       d_model=args.d_model,
-                                       num_t_heads=args.num_heads,
-                                       num_s_heads=1,
-                                       dim_feedforward=args.dim_feedforward,
-                                       num_encoder_layers=args.num_encoder_layers,
-                                       num_decoder_layers=args.num_decoder_layers,
-                                       activation=args.activation,
-                                       pad_token_id=PAD_IDX,
-                                       bos_token_id=BOS_IDX,
-                                       eos_token_id=EOS_IDX)
+        self.model_config = StackConfig(enc_vocab_size=self.tokenizer.get_vocab_size(),
+                                        dec_vocab_size=self.tokenizer.get_vocab_size(),
+                                        max_seq_len=args.max_seq_len,
+                                        d_model=args.d_model,
+                                        num_heads=args.num_heads,
+                                        dim_feedforward=args.dim_feedforward,
+                                        num_encoder_layers=args.num_encoder_layers,
+                                        num_decoder_layers=args.num_decoder_layers,
+                                        activation=args.activation,
+                                        pad_token_id=PAD_IDX,
+                                        bos_token_id=BOS_IDX,
+                                        eos_token_id=EOS_IDX)
 
-        self.model = Cube(self.model_config).to(args.device)
+        self.model = Stack(self.model_config).to(args.device)
         if args.do_parallel:
             self.model = torch.nn.DataParallel(self.model)
 
@@ -186,7 +185,10 @@ class Trainer(object):
                 tgt_out = tgt_ids[:, 1:]
                 enc_padding_mask, dec_padding_mask = create_mask(enc_ids, dec_ids, self.device)
 
-                dec_ids, logits = self.model.greedy_generate(enc_ids, enc_padding_mask, dec_ids)
+                if self.args.do_parallel:
+                    dec_ids, logits = self.model.module.greedy_generate(enc_ids, enc_padding_mask, dec_ids)
+                else:
+                    dec_ids, logits = self.model.greedy_generate(enc_ids, enc_padding_mask, dec_ids)
                 # loss = self.loss_fn(logits.reshape(-1, logits.shape[-1]), tgt_out.reshape(-1))
                 # losses += loss.item()
                 # loss_list.append(loss.item())

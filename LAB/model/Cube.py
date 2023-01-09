@@ -86,7 +86,7 @@ class Cube(nn.Module):
         enc_embeds = self.enc_embedding(enc_ids)
         enc_encoding, attns = self.encoder(enc_embeds,
                                            padding_mask=enc_padding_mask,
-                                           attn_mask=enc_attn_mask)
+                                           temporal_mask=enc_attn_mask)
         return enc_encoding, attns
 
     def decode(self, enc_encoding, dec_ids, past=None, **kwargs):

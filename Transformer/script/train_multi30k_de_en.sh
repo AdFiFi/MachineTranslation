@@ -4,8 +4,8 @@ cd ../
 python  main.py \
 --datasets "Multi30k" \
 --log_dir "./log_dir" \
---model "./Stack" \
---task "./multi30k_de_en" \
+--model "Transformer" \
+--task "multi30k_de_en" \
 --datasets "Multi30k" \
 --data_dir "./data" \
 --src_language "de" \

@@ -27,4 +27,4 @@ if __name__ == '__main__':
     wmt14_fr_en = load_dataset('wmt14', 'de-en')
     # wmt14_fr_en = load_dataset('wmt14', 'fr-en')
 
-    # multi = get_Multi30k_datadict('de', 'en')
+    multi = get_Multi30k_datadict('de', 'en')

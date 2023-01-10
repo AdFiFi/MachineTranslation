@@ -3,8 +3,8 @@ cd ../
 python  main.py \
 --datasets "wmt14" \
 --log_dir "./log_dir" \
---model "./Stack" \
---task "./wmt14_de_en" \
+--model "Transformer" \
+--task "wmt14_de_en" \
 --data_dir "./data" \
 --src_language "de" \
 --tgt_language "en" \

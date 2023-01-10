@@ -1,16 +1,13 @@
 import json
-import os
-import numpy as np
 from timeit import default_timer as timer
-from tqdm import tqdm
 
-from datasets import load_dataset
 from torch.utils.data import DataLoader, RandomSampler
 from torchtext.data.metrics import bleu_score
+from tqdm import tqdm
 
+from data import *
 from model import Transformer, TransformerConfig
 from utils import *
-from data import *
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)

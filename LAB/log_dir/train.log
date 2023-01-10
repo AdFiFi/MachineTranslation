@@ -1,0 +1,201 @@
+01/09/2023 19:48:41 - INFO - trainer -   ***** Running training *****
+01/09/2023 19:48:41 - INFO - trainer -     Num examples = 29001
+01/09/2023 19:48:41 - INFO - trainer -     Num Epochs = 10
+01/09/2023 19:48:41 - INFO - trainer -     Total train batch size = 128
+01/09/2023 19:48:41 - INFO - trainer -     warmup steps = 100
+01/09/2023 19:48:41 - INFO - trainer -     Total optimization steps = 290010
+01/09/2023 19:48:41 - INFO - trainer -     Save steps = 100
+01/09/2023 19:52:47 - INFO - trainer -   ***** Running training *****
+01/09/2023 19:52:47 - INFO - trainer -     Num examples = 29001
+01/09/2023 19:52:47 - INFO - trainer -     Num Epochs = 4
+01/09/2023 19:52:47 - INFO - trainer -     Total train batch size = 128
+01/09/2023 19:52:47 - INFO - trainer -     warmup steps = 4000
+01/09/2023 19:52:47 - INFO - trainer -     Total optimization steps = 116004
+01/09/2023 19:52:47 - INFO - trainer -     Save steps = 4000
+01/09/2023 19:56:10 - INFO - trainer -   ***** Running training *****
+01/09/2023 19:56:10 - INFO - trainer -     Num examples = 29001
+01/09/2023 19:56:10 - INFO - trainer -     Num Epochs = 10
+01/09/2023 19:56:10 - INFO - trainer -     Total train batch size = 128
+01/09/2023 19:56:10 - INFO - trainer -     warmup steps = 100
+01/09/2023 19:56:10 - INFO - trainer -     Total optimization steps = 290010
+01/09/2023 19:56:10 - INFO - trainer -     Save steps = 100
+01/09/2023 19:56:16 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 19:56:48 - INFO - trainer -   ***** Running prediction on single test dataset *****
+01/09/2023 19:56:48 - INFO - trainer -     Num examples = 1000
+01/09/2023 19:56:48 - INFO - trainer -     Batch size = 128
+01/09/2023 19:56:48 - INFO - trainer -     Search strategy = beam search(beam num=5)
+01/09/2023 19:56:48 - INFO - trainer -   {'BLUE': 0.0}
+01/09/2023 19:56:52 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 19:57:23 - INFO - trainer -   ***** Running prediction on single test dataset *****
+01/09/2023 19:57:23 - INFO - trainer -     Num examples = 1000
+01/09/2023 19:57:23 - INFO - trainer -     Batch size = 128
+01/09/2023 19:57:23 - INFO - trainer -     Search strategy = beam search(beam num=5)
+01/09/2023 19:57:24 - INFO - trainer -   {'BLUE': 0.02741491632129176}
+01/09/2023 19:57:28 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 19:57:36 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+01/09/2023 19:57:36 - INFO - trainer -     Num examples = 1015
+01/09/2023 19:57:36 - INFO - trainer -     Batch size = 128
+01/09/2023 19:57:38 - INFO - trainer -   Epoch: 1, Train loss: 3.985, Val loss: 2.460, Epoch time = 86.397s
+01/09/2023 19:57:41 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 19:57:46 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 19:58:17 - INFO - trainer -   ***** Running prediction on single test dataset *****
+01/09/2023 19:58:17 - INFO - trainer -     Num examples = 1000
+01/09/2023 19:58:17 - INFO - trainer -     Batch size = 128
+01/09/2023 19:58:17 - INFO - trainer -     Search strategy = beam search(beam num=5)
+01/09/2023 19:58:26 - INFO - trainer -   {'BLUE': 0.04462667927145958}
+01/09/2023 19:58:29 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 19:59:00 - INFO - trainer -   ***** Running prediction on single test dataset *****
+01/09/2023 19:59:00 - INFO - trainer -     Num examples = 1000
+01/09/2023 19:59:00 - INFO - trainer -     Batch size = 128
+01/09/2023 19:59:00 - INFO - trainer -     Search strategy = beam search(beam num=5)
+01/09/2023 19:59:02 - INFO - trainer -   {'BLUE': 0.08408966660499573}
+01/09/2023 19:59:06 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 19:59:14 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+01/09/2023 19:59:14 - INFO - trainer -     Num examples = 1015
+01/09/2023 19:59:14 - INFO - trainer -     Batch size = 128
+01/09/2023 19:59:16 - INFO - trainer -   Epoch: 2, Train loss: 2.157, Val loss: 1.878, Epoch time = 92.925s
+01/09/2023 19:59:20 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 19:59:24 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 19:59:55 - INFO - trainer -   ***** Running prediction on single test dataset *****
+01/09/2023 19:59:55 - INFO - trainer -     Num examples = 1000
+01/09/2023 19:59:55 - INFO - trainer -     Batch size = 128
+01/09/2023 19:59:55 - INFO - trainer -     Search strategy = beam search(beam num=5)
+01/09/2023 19:59:56 - INFO - trainer -   {'BLUE': 0.14314993463933115}
+01/09/2023 19:59:59 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 20:00:31 - INFO - trainer -   ***** Running prediction on single test dataset *****
+01/09/2023 20:00:31 - INFO - trainer -     Num examples = 1000
+01/09/2023 20:00:31 - INFO - trainer -     Batch size = 128
+01/09/2023 20:00:31 - INFO - trainer -     Search strategy = beam search(beam num=5)
+01/09/2023 20:00:32 - INFO - trainer -   {'BLUE': 0.17005649209022522}
+01/09/2023 20:00:36 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 20:00:44 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+01/09/2023 20:00:44 - INFO - trainer -     Num examples = 1015
+01/09/2023 20:00:44 - INFO - trainer -     Batch size = 128
+01/09/2023 20:00:46 - INFO - trainer -   Epoch: 3, Train loss: 1.738, Val loss: 1.572, Epoch time = 84.520s
+01/09/2023 20:00:49 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 20:00:53 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 20:01:25 - INFO - trainer -   ***** Running prediction on single test dataset *****
+01/09/2023 20:01:25 - INFO - trainer -     Num examples = 1000
+01/09/2023 20:01:25 - INFO - trainer -     Batch size = 128
+01/09/2023 20:01:25 - INFO - trainer -     Search strategy = beam search(beam num=5)
+01/09/2023 20:01:27 - INFO - trainer -   {'BLUE': 0.19167053699493408}
+01/09/2023 20:01:32 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 20:02:03 - INFO - trainer -   ***** Running prediction on single test dataset *****
+01/09/2023 20:02:03 - INFO - trainer -     Num examples = 1000
+01/09/2023 20:02:03 - INFO - trainer -     Batch size = 128
+01/09/2023 20:02:03 - INFO - trainer -     Search strategy = beam search(beam num=5)
+01/09/2023 20:02:04 - INFO - trainer -   {'BLUE': 0.212763249874115}
+01/09/2023 20:02:08 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 20:02:16 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+01/09/2023 20:02:16 - INFO - trainer -     Num examples = 1015
+01/09/2023 20:02:16 - INFO - trainer -     Batch size = 128
+01/09/2023 20:02:18 - INFO - trainer -   Epoch: 4, Train loss: 1.497, Val loss: 1.392, Epoch time = 86.930s
+01/09/2023 20:02:23 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 20:02:28 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 20:02:59 - INFO - trainer -   ***** Running prediction on single test dataset *****
+01/09/2023 20:02:59 - INFO - trainer -     Num examples = 1000
+01/09/2023 20:02:59 - INFO - trainer -     Batch size = 128
+01/09/2023 20:02:59 - INFO - trainer -     Search strategy = beam search(beam num=5)
+01/09/2023 20:03:00 - INFO - trainer -   {'BLUE': 0.24015666433477553}
+01/09/2023 20:03:04 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 20:03:35 - INFO - trainer -   ***** Running prediction on single test dataset *****
+01/09/2023 20:03:35 - INFO - trainer -     Num examples = 1000
+01/09/2023 20:03:35 - INFO - trainer -     Batch size = 128
+01/09/2023 20:03:35 - INFO - trainer -     Search strategy = beam search(beam num=5)
+01/09/2023 20:03:36 - INFO - trainer -   {'BLUE': 0.22367845475673676}
+01/09/2023 20:03:40 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 20:03:48 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+01/09/2023 20:03:48 - INFO - trainer -     Num examples = 1015
+01/09/2023 20:03:48 - INFO - trainer -     Batch size = 128
+01/09/2023 20:03:50 - INFO - trainer -   Epoch: 5, Train loss: 1.345, Val loss: 1.270, Epoch time = 85.583s
+01/09/2023 20:03:54 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 20:03:58 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 20:04:30 - INFO - trainer -   ***** Running prediction on single test dataset *****
+01/09/2023 20:04:30 - INFO - trainer -     Num examples = 1000
+01/09/2023 20:04:30 - INFO - trainer -     Batch size = 128
+01/09/2023 20:04:30 - INFO - trainer -     Search strategy = beam search(beam num=5)
+01/09/2023 20:04:31 - INFO - trainer -   {'BLUE': 0.2453349227764291}
+01/09/2023 20:04:35 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 20:05:06 - INFO - trainer -   ***** Running prediction on single test dataset *****
+01/09/2023 20:05:06 - INFO - trainer -     Num examples = 1000
+01/09/2023 20:05:06 - INFO - trainer -     Batch size = 128
+01/09/2023 20:05:06 - INFO - trainer -     Search strategy = beam search(beam num=5)
+01/09/2023 20:05:07 - INFO - trainer -   {'BLUE': 0.26200212556307706}
+01/09/2023 20:05:12 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 20:05:20 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+01/09/2023 20:05:20 - INFO - trainer -     Num examples = 1015
+01/09/2023 20:05:20 - INFO - trainer -     Batch size = 128
+01/09/2023 20:05:22 - INFO - trainer -   Epoch: 6, Train loss: 1.218, Val loss: 1.190, Epoch time = 86.367s
+01/09/2023 20:05:25 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 20:05:30 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 20:06:01 - INFO - trainer -   ***** Running prediction on single test dataset *****
+01/09/2023 20:06:01 - INFO - trainer -     Num examples = 1000
+01/09/2023 20:06:01 - INFO - trainer -     Batch size = 128
+01/09/2023 20:06:01 - INFO - trainer -     Search strategy = beam search(beam num=5)
+01/09/2023 20:06:02 - INFO - trainer -   {'BLUE': 0.2895104337253331}
+01/09/2023 20:06:06 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 20:06:37 - INFO - trainer -   ***** Running prediction on single test dataset *****
+01/09/2023 20:06:37 - INFO - trainer -     Num examples = 1000
+01/09/2023 20:06:37 - INFO - trainer -     Batch size = 128
+01/09/2023 20:06:37 - INFO - trainer -     Search strategy = beam search(beam num=5)
+01/09/2023 20:06:39 - INFO - trainer -   {'BLUE': 0.2726040780544281}
+01/09/2023 20:06:42 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 20:06:51 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+01/09/2023 20:06:51 - INFO - trainer -     Num examples = 1015
+01/09/2023 20:06:51 - INFO - trainer -     Batch size = 128
+01/09/2023 20:06:53 - INFO - trainer -   Epoch: 7, Train loss: 1.131, Val loss: 1.116, Epoch time = 85.257s
+01/09/2023 20:06:56 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 20:07:00 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 20:07:32 - INFO - trainer -   ***** Running prediction on single test dataset *****
+01/09/2023 20:07:32 - INFO - trainer -     Num examples = 1000
+01/09/2023 20:07:32 - INFO - trainer -     Batch size = 128
+01/09/2023 20:07:32 - INFO - trainer -     Search strategy = beam search(beam num=5)
+01/09/2023 20:07:33 - INFO - trainer -   {'BLUE': 0.24705106019973755}
+01/09/2023 20:07:37 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 20:08:08 - INFO - trainer -   ***** Running prediction on single test dataset *****
+01/09/2023 20:08:08 - INFO - trainer -     Num examples = 1000
+01/09/2023 20:08:08 - INFO - trainer -     Batch size = 128
+01/09/2023 20:08:08 - INFO - trainer -     Search strategy = beam search(beam num=5)
+01/09/2023 20:08:10 - INFO - trainer -   {'BLUE': 0.31490495800971985}
+01/09/2023 20:08:13 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 20:08:22 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+01/09/2023 20:08:22 - INFO - trainer -     Num examples = 1015
+01/09/2023 20:08:22 - INFO - trainer -     Batch size = 128
+01/09/2023 20:08:23 - INFO - trainer -   Epoch: 8, Train loss: 1.065, Val loss: 1.067, Epoch time = 85.739s
+01/09/2023 20:08:27 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 20:08:31 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 20:09:02 - INFO - trainer -   ***** Running prediction on single test dataset *****
+01/09/2023 20:09:02 - INFO - trainer -     Num examples = 1000
+01/09/2023 20:09:02 - INFO - trainer -     Batch size = 128
+01/09/2023 20:09:02 - INFO - trainer -     Search strategy = beam search(beam num=5)
+01/09/2023 20:09:11 - INFO - trainer -   {'BLUE': 0.3028222918510437}
+01/09/2023 20:09:14 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 20:09:46 - INFO - trainer -   ***** Running prediction on single test dataset *****
+01/09/2023 20:09:46 - INFO - trainer -     Num examples = 1000
+01/09/2023 20:09:46 - INFO - trainer -     Batch size = 128
+01/09/2023 20:09:46 - INFO - trainer -     Search strategy = beam search(beam num=5)
+01/09/2023 20:09:47 - INFO - trainer -   {'BLUE': 0.31575309557847764}
+01/09/2023 20:09:50 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 20:09:58 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+01/09/2023 20:09:58 - INFO - trainer -     Num examples = 1015
+01/09/2023 20:09:58 - INFO - trainer -     Batch size = 128
+01/09/2023 20:10:00 - INFO - trainer -   Epoch: 9, Train loss: 0.993, Val loss: 1.033, Epoch time = 91.659s
+01/09/2023 20:10:04 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 20:10:08 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 20:10:39 - INFO - trainer -   ***** Running prediction on single test dataset *****
+01/09/2023 20:10:39 - INFO - trainer -     Num examples = 1000
+01/09/2023 20:10:39 - INFO - trainer -     Batch size = 128
+01/09/2023 20:10:39 - INFO - trainer -     Search strategy = beam search(beam num=5)
+01/09/2023 20:10:41 - INFO - trainer -   {'BLUE': 0.30214594655526517}
+01/09/2023 20:10:44 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 20:11:15 - INFO - trainer -   ***** Running prediction on single test dataset *****
+01/09/2023 20:11:15 - INFO - trainer -     Num examples = 1000
+01/09/2023 20:11:15 - INFO - trainer -     Batch size = 128
+01/09/2023 20:11:15 - INFO - trainer -     Search strategy = beam search(beam num=5)
+01/09/2023 20:11:16 - INFO - trainer -   {'BLUE': 0.3010663390159607}
+01/09/2023 20:11:19 - INFO - trainer -   Saving model checkpoint to output_dir/de-en
+01/09/2023 20:11:28 - INFO - trainer -   ***** Running evaluation on validation dataset *****
+01/09/2023 20:11:28 - INFO - trainer -     Num examples = 1015
+01/09/2023 20:11:28 - INFO - trainer -     Batch size = 128
+01/09/2023 20:11:30 - INFO - trainer -   Epoch: 10, Train loss: 0.926, Val loss: 0.993, Epoch time = 84.232s
+01/09/2023 20:11:33 - INFO - trainer -   Saving model checkpoint to output_dir/de-en

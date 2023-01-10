@@ -1,14 +1,11 @@
 import json
-import os
-import numpy as np
 from timeit import default_timer as timer
-from tqdm import tqdm
 
-from datasets import load_dataset
 from torch.utils.data import DataLoader, RandomSampler
 from torchtext.data.metrics import bleu_score
+from tqdm import tqdm
 
-from model import *
+from init_model_config import model_and_config
 from utils import *
 from data import *
 
@@ -23,20 +20,8 @@ class Trainer(object):
         self.device = 'cuda' if args.device != 'cpu' and torch.cuda.is_available() else args.device
         self.tokenizer = SharedTokenizer(args.src_language, args.tgt_language).load(os.path.join(args.model_dir, self.task))
 
-        self.model_config = StackConfig(enc_vocab_size=self.tokenizer.get_vocab_size(),
-                                        dec_vocab_size=self.tokenizer.get_vocab_size(),
-                                        max_seq_len=args.max_seq_len,
-                                        d_model=args.d_model,
-                                        num_heads=args.num_heads,
-                                        dim_feedforward=args.dim_feedforward,
-                                        num_encoder_layers=args.num_encoder_layers,
-                                        num_decoder_layers=args.num_decoder_layers,
-                                        activation=args.activation,
-                                        pad_token_id=PAD_IDX,
-                                        bos_token_id=BOS_IDX,
-                                        eos_token_id=EOS_IDX)
-
-        self.model = Stack(self.model_config).to(args.device)
+        model, self.model_config = model_and_config(args, self.tokenizer)
+        self.model = model.to(args.device)
         if args.do_parallel:
             self.model = torch.nn.DataParallel(self.model)
 
@@ -224,7 +209,7 @@ class Trainer(object):
         if not os.path.exists(path):
             os.makedirs(path)
         model_to_save = self.model.module if self.args.do_parallel else self.model
-        torch.save(model_to_save, os.path.join(path, 'model.bin'))
+        torch.save(model_to_save, os.path.join(path, f'{self.args.model}.bin'))
 
         # Save training arguments together with the trained model
         args_dict = {k: v for k, v in self.args.__dict__.items()}
@@ -233,7 +218,7 @@ class Trainer(object):
         logger.info("Saving model checkpoint to %s", path)
 
     def load_model(self):
-        path = os.path.join(self.args.model_dir, self.task, 'model.bin')
+        path = os.path.join(self.args.model_dir, self.task, f'{self.args.model}.bin')
         if not os.path.exists(path):
             logger.info("Model doesn't exists! Train first!")
             return

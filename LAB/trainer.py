@@ -1,6 +1,7 @@
 import json
 from timeit import default_timer as timer
 
+import torch.utils.data as utils
 from torch.utils.data import DataLoader, RandomSampler
 from torchtext.data.metrics import bleu_score
 from tqdm import tqdm
@@ -14,16 +15,18 @@ logger.setLevel(logging.DEBUG)
 
 
 class Trainer(object):
-    def __init__(self, args):
+    def __init__(self, args, local_rank=0):
         self.args = args
+        self.local_rank = local_rank
         self.task = f'{args.src_language}-{args.tgt_language}'
-        self.device = 'cuda' if args.device != 'cpu' and torch.cuda.is_available() else args.device
+        self.device = f'cuda:{self.local_rank}' if args.device != 'cpu' and torch.cuda.is_available() else args.device
         self.tokenizer = SharedTokenizer(args.src_language, args.tgt_language).load(os.path.join(args.model_dir, self.task))
 
         model, self.model_config = model_and_config(args, self.tokenizer)
         self.model = model.to(args.device)
         if args.do_parallel:
-            self.model = torch.nn.DataParallel(self.model)
+            # self.model = torch.nn.DataParallel(self.model)
+            self.model = torch.nn.parallel.DistributedDataParallel(self.model, device_ids=[self.local_rank])
         # self.save_model()
         self.loss_fn = torch.nn.CrossEntropyLoss(label_smoothing=self.args.epsilon_ls)
         self.optimizer = None
@@ -46,11 +49,13 @@ class Trainer(object):
 
     def train_epoch(self):
         train_datasets = self.datasets['train']
-        sampler = RandomSampler(train_datasets)
+        # sampler = RandomSampler(train_datasets)
+        sampler = utils.distributed.DistributedSampler(train_datasets)
         train_dataloader = DataLoader(train_datasets,
                                       sampler=sampler,
                                       batch_size=self.args.train_batch_size,
                                       collate_fn=self.collate_fn,
+                                      shuffle=False,
                                       num_workers=self.args.data_processors)
         self.model.train()
         losses = 0
@@ -116,7 +121,10 @@ class Trainer(object):
     def evaluate(self):
 
         evaluate_datasets = self.datasets['validation']
+        sampler = utils.distributed.DistributedSampler(evaluate_datasets)
         evaluate_dataloader = DataLoader(evaluate_datasets,
+                                         sampler=sampler,
+                                         shuffle=False,
                                          batch_size=self.args.evaluate_batch_size,
                                          collate_fn=self.collate_fn,
                                          num_workers=self.args.data_processors)
@@ -143,9 +151,11 @@ class Trainer(object):
 
     def test(self, mode='full'):
         test_datasets = self.datasets['test']
-        sampler = RandomSampler(test_datasets)
+        # sampler = RandomSampler(test_datasets)
+        sampler = utils.distributed.DistributedSampler(test_datasets)
         test_dataloader = DataLoader(test_datasets,
                                      sampler=sampler,
+                                     shuffle=False,
                                      batch_size=self.args.evaluate_batch_size,
                                      collate_fn=self.collate_fn,
                                      num_workers=self.args.data_processors)
@@ -229,5 +239,7 @@ class Trainer(object):
         self.model = torch.load(os.path.join(path))
         self.model.to(self.device)
         if self.args.do_parallel:
-            self.model = torch.nn.DataParallel(self.model)
+            # self.model = torch.nn.DataParallel(self.model)
+            self.model = torch.nn.parallel.DistributedDataParallel(self.model, device_ids=[self.local_rank])
         logger.info("***** Model Loaded *****")
+

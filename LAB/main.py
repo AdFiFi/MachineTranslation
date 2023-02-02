@@ -1,5 +1,7 @@
 import argparse
 
+from torch import distributed
+
 from trainer import Trainer
 from utils import *
 
@@ -8,10 +10,18 @@ logger = logging.getLogger(__name__)
 
 
 def main(args):
-    trainer = Trainer(args)
+    local_rank = 0
+    if args.do_parallel:
+        local_rank = int(os.environ['LOCAL_RANK'])
+        world_size = int(os.environ['WORLD_SIZE'])
+        rank = int(os.environ['RANK'])
+        distributed.init_process_group('nccl', world_size=world_size, rank=rank)
+        # distributed.init_process_group('gloo', world_size=self.world_size, rank=self.rank)
+        torch.cuda.set_device(local_rank)
+    trainer = Trainer(args, local_rank=local_rank)
     if args.do_train:
-        init_logger(f'{args.log_dir}/train_{args.model}_{args.task}.log')
         trainer.train()
+
     else:
         if args.do_evaluate:
             init_logger(f'{args.log_dir}/evaluate.log')

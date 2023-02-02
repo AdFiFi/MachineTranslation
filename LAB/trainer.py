@@ -25,7 +25,7 @@ class Trainer(object):
         if args.do_parallel:
             self.model = torch.nn.DataParallel(self.model)
         # self.save_model()
-        self.loss_fn = torch.nn.CrossEntropyLoss()
+        self.loss_fn = torch.nn.CrossEntropyLoss(label_smoothing=self.args.epsilon_ls)
         self.optimizer = None
         self.scheduler = None
 

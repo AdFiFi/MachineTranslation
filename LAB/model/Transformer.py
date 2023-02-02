@@ -1,6 +1,13 @@
 import torch
 from torch import nn
-# from transformers.generation_utils import GenerationMixin
+from torch.nn import functional as F
+from transformers import (
+    LogitsProcessorList,
+    StoppingCriteriaList,
+    MinLengthLogitsProcessor,
+    BeamSearchScorer,
+    MaxLengthCriteria
+)
 
 from .Embed import DataEmbedding
 from .Transformer_EncDec import TransformerEncoder, TransformerDecoder
@@ -105,6 +112,78 @@ class Transformer(nn.Module):
                 break
 
         return dec_ids, logits
+
+    def beam_generate(self, enc_ids, enc_padding_mask, dec_ids, max_len=None, enc_attn_mask=None, num_beams=5):
+        logits_processor = LogitsProcessorList([MinLengthLogitsProcessor(5, eos_token_id=self.sep_token_id), ])
+        stopping_criteria = StoppingCriteriaList()
+        stopping_criteria.append(MaxLengthCriteria(max_length=self.args.max_input_len))
+        cur_batch_size = enc_ids.size(0)
+        enc_ids = enc_ids.repeat_interleave(num_beams, dim=0)
+        enc_padding_mask = enc_padding_mask.repeat_interleave(num_beams, dim=0)
+        dec_ids = dec_ids.repeat_interleave(num_beams, dim=0)
+        beam_scorer = BeamSearchScorer(
+            batch_size=cur_batch_size,
+            num_beams=num_beams,
+            device=self.device,
+        )
+        beam_scores = torch.zeros((cur_batch_size, num_beams), dtype=torch.float, device=self.device)
+        beam_scores[:, 1:] = -1e9
+        beam_scores = beam_scores.view((cur_batch_size * num_beams,))
+
+        enc_encoding, _ = self.encode(enc_ids, enc_padding_mask, enc_attn_mask)
+        max_len = self.config.max_seq_len if max_len is None else min(max_len, self.config.max_seq_len)
+        logits = None
+        for i in range(max_len - 1):
+            logits = self.decode(enc_encoding, dec_ids)
+            N, T = dec_ids.size()
+            outputs = logits.view((N, T, logits.size(-1)))
+            next_token_logits = outputs[:, i]
+            next_token_scores = F.log_softmax(next_token_logits, dim=-1)  # (batch_size * num_beams, vocab_size)
+
+            next_token_scores = logits_processor(dec_ids, next_token_scores)
+            next_token_scores = next_token_scores + beam_scores[:, None].expand_as(next_token_scores)
+
+            # reshape for beam search
+            vocab_size = next_token_scores.shape[-1]
+            next_token_scores = next_token_scores.view(cur_batch_size, num_beams * vocab_size)
+
+            next_token_scores, next_tokens = torch.topk(
+                next_token_scores, 2 * num_beams, dim=1, largest=True, sorted=True
+            )
+
+            next_indices = next_tokens // vocab_size
+            next_tokens = next_tokens % vocab_size
+
+            # stateless
+            beam_outputs = beam_scorer.process(
+                dec_ids,
+                next_token_scores,
+                next_tokens,
+                next_indices,
+                pad_token_id=self.pad_token_id,
+                eos_token_id=self.sep_token_id,
+            )
+            beam_scores = beam_outputs["next_beam_scores"]
+            beam_next_tokens = beam_outputs["next_beam_tokens"]
+            beam_idx = beam_outputs["next_beam_indices"]
+
+            dec_ids = dec_ids[beam_idx]
+            dec_ids[:, i + 1] = beam_next_tokens
+            if not any(beam_next_tokens):
+                break
+
+        sequence_outputs = beam_scorer.finalize(
+            dec_ids,
+            beam_scores,
+            next_tokens,
+            next_indices,
+            pad_token_id=self.pad_token_id,
+            eos_token_id=self.sep_token_id,
+            max_length=stopping_criteria.max_length,
+        )
+        dec_ids = sequence_outputs["sequences"]
+        return dec_ids, logits
+
 
 
 #

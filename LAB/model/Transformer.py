@@ -114,9 +114,9 @@ class Transformer(nn.Module):
         return dec_ids, logits
 
     def beam_generate(self, enc_ids, enc_padding_mask, dec_ids, max_len=None, enc_attn_mask=None, num_beams=5):
-        logits_processor = LogitsProcessorList([MinLengthLogitsProcessor(5, eos_token_id=self.sep_token_id), ])
+        logits_processor = LogitsProcessorList([MinLengthLogitsProcessor(5, eos_token_id=self.config.eos_token_id), ])
         stopping_criteria = StoppingCriteriaList()
-        stopping_criteria.append(MaxLengthCriteria(max_length=self.args.max_input_len))
+        stopping_criteria.append(MaxLengthCriteria(max_length=self.config.max_seq_len))
         cur_batch_size = enc_ids.size(0)
         enc_ids = enc_ids.repeat_interleave(num_beams, dim=0)
         enc_padding_mask = enc_padding_mask.repeat_interleave(num_beams, dim=0)
@@ -124,9 +124,9 @@ class Transformer(nn.Module):
         beam_scorer = BeamSearchScorer(
             batch_size=cur_batch_size,
             num_beams=num_beams,
-            device=self.device,
+            device=enc_ids.device,
         )
-        beam_scores = torch.zeros((cur_batch_size, num_beams), dtype=torch.float, device=self.device)
+        beam_scores = torch.zeros((cur_batch_size, num_beams), dtype=torch.float, device=enc_ids.device)
         beam_scores[:, 1:] = -1e9
         beam_scores = beam_scores.view((cur_batch_size * num_beams,))
 
@@ -160,15 +160,15 @@ class Transformer(nn.Module):
                 next_token_scores,
                 next_tokens,
                 next_indices,
-                pad_token_id=self.pad_token_id,
-                eos_token_id=self.sep_token_id,
+                pad_token_id=self.config.pad_token_id,
+                eos_token_id=self.config.eos_token_id,
             )
             beam_scores = beam_outputs["next_beam_scores"]
             beam_next_tokens = beam_outputs["next_beam_tokens"]
             beam_idx = beam_outputs["next_beam_indices"]
 
             dec_ids = dec_ids[beam_idx]
-            dec_ids[:, i + 1] = beam_next_tokens
+            dec_ids = torch.cat((dec_ids, beam_next_tokens.unsqueeze(1)), dim=1)
             if not any(beam_next_tokens):
                 break
 
@@ -177,8 +177,8 @@ class Transformer(nn.Module):
             beam_scores,
             next_tokens,
             next_indices,
-            pad_token_id=self.pad_token_id,
-            eos_token_id=self.sep_token_id,
+            pad_token_id=self.config.pad_token_id,
+            eos_token_id=self.config.eos_token_id,
             max_length=stopping_criteria.max_length,
         )
         dec_ids = sequence_outputs["sequences"]

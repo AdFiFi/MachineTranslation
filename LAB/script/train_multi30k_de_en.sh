@@ -38,5 +38,5 @@ python  main.py \
 \
 --do_evaluate \
 --evaluate_batch_size 128 \
---beam_num 5 \
+--num_beams 5 \
 --alpha 0.6

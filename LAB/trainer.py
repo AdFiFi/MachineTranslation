@@ -24,7 +24,7 @@ class Trainer(object):
         self.model = model.to(args.device)
         if args.do_parallel:
             self.model = torch.nn.DataParallel(self.model)
-
+        # self.save_model()
         self.loss_fn = torch.nn.CrossEntropyLoss()
         self.optimizer = None
         self.scheduler = None
@@ -153,7 +153,7 @@ class Trainer(object):
         logger.info("  Num examples = %d", len(test_datasets))
         logger.info("  Batch size = %d", self.args.evaluate_batch_size)
         logger.info("  Search strategy = %s",
-                    "greedy search" if self.args.beam_num == 1 else f"beam search(beam num={self.args.beam_num})")
+                    "greedy search" if self.args.num_beams == 1 else f"beam search(beam num={self.args.num_beams})")
         self.model.eval()
         losses = 0
         loss_list = []
@@ -171,9 +171,11 @@ class Trainer(object):
                 enc_padding_mask, dec_padding_mask = create_mask(enc_ids, dec_ids, self.device)
 
                 if self.args.do_parallel:
-                    dec_ids, logits = self.model.module.greedy_generate(enc_ids, enc_padding_mask, dec_ids)
+                    dec_ids, logits = self.model.module.beam_generate(enc_ids, enc_padding_mask, dec_ids,
+                                                                      num_beams=self.args.num_beams)
                 else:
-                    dec_ids, logits = self.model.greedy_generate(enc_ids, enc_padding_mask, dec_ids)
+                    dec_ids, logits = self.model.beam_generate(enc_ids, enc_padding_mask, dec_ids,
+                                                               num_beams=self.args.num_beams)
                 # loss = self.loss_fn(logits.reshape(-1, logits.shape[-1]), tgt_out.reshape(-1))
                 # losses += loss.item()
                 # loss_list.append(loss.item())

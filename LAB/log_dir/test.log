@@ -88,3 +88,47 @@
 12/19/2022 19:53:14 - INFO - trainer -     Batch size = 10
 12/19/2022 19:53:14 - INFO - trainer -     Search strategy = greedy search
 12/19/2022 19:53:39 - INFO - trainer -   {'BLUE': 0.26011425256729126}
+02/03/2023 02:12:55 - INFO - trainer -   ***** Model Loaded *****
+02/03/2023 02:12:55 - INFO - trainer -   ***** Running prediction on full test dataset *****
+02/03/2023 02:12:55 - INFO - trainer -     Num examples = 1000
+02/03/2023 02:12:55 - INFO - trainer -     Batch size = 128
+02/03/2023 02:13:21 - INFO - trainer -   ***** Model Loaded *****
+02/03/2023 02:13:21 - INFO - trainer -   ***** Running prediction on full test dataset *****
+02/03/2023 02:13:21 - INFO - trainer -     Num examples = 1000
+02/03/2023 02:13:21 - INFO - trainer -     Batch size = 128
+02/03/2023 02:13:21 - INFO - trainer -     Search strategy = greedy search
+02/03/2023 02:15:29 - INFO - trainer -   ***** Model Loaded *****
+02/03/2023 02:15:29 - INFO - trainer -   ***** Running prediction on full test dataset *****
+02/03/2023 02:15:29 - INFO - trainer -     Num examples = 1000
+02/03/2023 02:15:29 - INFO - trainer -     Batch size = 128
+02/03/2023 02:15:29 - INFO - trainer -     Search strategy = greedy search
+02/03/2023 02:16:29 - INFO - trainer -   ***** Model Loaded *****
+02/03/2023 02:16:29 - INFO - trainer -   ***** Running prediction on full test dataset *****
+02/03/2023 02:16:29 - INFO - trainer -     Num examples = 1000
+02/03/2023 02:16:29 - INFO - trainer -     Batch size = 128
+02/03/2023 02:16:29 - INFO - trainer -     Search strategy = greedy search
+02/03/2023 02:17:13 - INFO - trainer -   ***** Model Loaded *****
+02/03/2023 02:17:13 - INFO - trainer -   ***** Running prediction on full test dataset *****
+02/03/2023 02:17:13 - INFO - trainer -     Num examples = 1000
+02/03/2023 02:17:13 - INFO - trainer -     Batch size = 128
+02/03/2023 02:17:13 - INFO - trainer -     Search strategy = beam search(beam num=5)
+02/03/2023 02:17:41 - INFO - trainer -   ***** Model Loaded *****
+02/03/2023 02:17:41 - INFO - trainer -   ***** Running prediction on full test dataset *****
+02/03/2023 02:17:41 - INFO - trainer -     Num examples = 1000
+02/03/2023 02:17:41 - INFO - trainer -     Batch size = 128
+02/03/2023 02:17:41 - INFO - trainer -     Search strategy = beam search(beam num=5)
+02/03/2023 02:19:16 - INFO - trainer -   ***** Model Loaded *****
+02/03/2023 02:19:16 - INFO - trainer -   ***** Running prediction on full test dataset *****
+02/03/2023 02:19:16 - INFO - trainer -     Num examples = 1000
+02/03/2023 02:19:16 - INFO - trainer -     Batch size = 128
+02/03/2023 02:19:16 - INFO - trainer -     Search strategy = beam search(beam num=5)
+02/03/2023 02:20:43 - INFO - trainer -   ***** Model Loaded *****
+02/03/2023 02:20:43 - INFO - trainer -   ***** Running prediction on full test dataset *****
+02/03/2023 02:20:43 - INFO - trainer -     Num examples = 1000
+02/03/2023 02:20:43 - INFO - trainer -     Batch size = 128
+02/03/2023 02:20:43 - INFO - trainer -     Search strategy = beam search(beam num=5)
+02/03/2023 02:21:38 - INFO - trainer -   ***** Model Loaded *****
+02/03/2023 02:21:38 - INFO - trainer -   ***** Running prediction on full test dataset *****
+02/03/2023 02:21:38 - INFO - trainer -     Num examples = 1000
+02/03/2023 02:21:38 - INFO - trainer -     Batch size = 128
+02/03/2023 02:21:38 - INFO - trainer -     Search strategy = beam search(beam num=5)

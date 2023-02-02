@@ -70,7 +70,7 @@ if __name__ == '__main__':
     evaluate_group.add_argument("--do_evaluate", action="store_true", help="")
     evaluate_group.add_argument("--do_test", action="store_true", help="")
     evaluate_group.add_argument("--evaluate_batch_size", default=128, type=int, help="")
-    evaluate_group.add_argument("--beam_num", default=1, type=int, help="")
+    evaluate_group.add_argument("--num_beams", default=5, type=int, help="")
     evaluate_group.add_argument("--alpha", default=0.6, type=float, help="length penalty")
 
     Args = parser.parse_args()

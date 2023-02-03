@@ -1,8 +1,10 @@
 import json
 from timeit import default_timer as timer
 
+import torch
 import torch.utils.data as utils
 from torch.utils.data import DataLoader, RandomSampler
+import torch.distributed as dist
 from torchtext.data.metrics import bleu_score
 from tqdm import tqdm
 
@@ -15,9 +17,10 @@ logger.setLevel(logging.DEBUG)
 
 
 class Trainer(object):
-    def __init__(self, args, local_rank=0):
+    def __init__(self, args, local_rank=0, world_size=0):
         self.args = args
         self.local_rank = local_rank
+        self.world_size = world_size
         self.task = f'{args.src_language}-{args.tgt_language}'
         self.device = f'cuda:{self.local_rank}' if args.device != 'cpu' and torch.cuda.is_available() else args.device
         self.tokenizer = SharedTokenizer(args.src_language, args.tgt_language).load(os.path.join(args.model_dir, self.task))
@@ -107,6 +110,7 @@ class Trainer(object):
                                                               num_warmup_steps=self.args.warmup_steps)
         for epoch in tqdm(range(1, self.args.num_epochs + 1), desc="epoch"):
             start_time = timer()
+            self.empty_cache()
             train_loss = self.train_epoch()
             self.empty_cache()
             end_time = timer()
@@ -116,7 +120,11 @@ class Trainer(object):
                 self.empty_cache()
                 logger.info(f"Epoch: {epoch}, Train loss: {train_loss:.3f}, Val loss: {val_loss:.3f}, "
                             f"Epoch time = {(end_time - start_time):.3f}s")
+            # if self.args.do_test:
+            #     self.test()
             self.save_model()
+        if self.args.do_test:
+            self.test()
 
     def evaluate(self):
 
@@ -190,6 +198,16 @@ class Trainer(object):
                 # losses += loss.item()
                 # loss_list.append(loss.item())
 
+                # if self.args.do_parallel:
+                #     dec_ids_list = [torch.zeros_like(dec_ids).to(self.device) for _ in range(self.world_size)]
+                #     dist.all_gather(dec_ids_list, dec_ids)
+                #     dec_ids = torch.cat(dec_ids_list, dim=0)
+                #     tgt_out_list = [torch.zeros_like(tgt_out).to(self.device) for _ in range(self.world_size)]
+                #     dist.all_gather(tgt_out_list, tgt_out)
+                #     tgt_out = torch.cat(tgt_out_list, dim=0)
+                #     # else:
+                #     #     continue
+
                 preds_ids = dec_ids.detach().cpu().numpy()
                 target_ids = tgt_out.detach().cpu().numpy()
                 for i in range(preds_ids.shape[0]):
@@ -204,6 +222,10 @@ class Trainer(object):
                     break
 
         blue = bleu_score(text_generation_corpus_list, text_target_corpus_list)
+        if self.args.do_parallel:
+            blue = torch.tensor(blue).to(self.device)
+            dist.all_reduce(blue, op=dist.ReduceOp.SUM)
+            blue = float(blue) / self.world_size
         results = {
             # "loss": losses / len(loss_list),
             "BLUE": blue

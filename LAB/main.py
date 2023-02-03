@@ -5,12 +5,13 @@ from torch import distributed
 from trainer import Trainer
 from utils import *
 
-os.environ['CUDA_VISIBLE_DEVICES'] = "1,3"
+# os.environ['CUDA_VISIBLE_DEVICES'] = "1,3"
 logger = logging.getLogger(__name__)
 
 
 def main(args):
     local_rank = 0
+    world_size = 0
     if args.do_parallel:
         local_rank = int(os.environ['LOCAL_RANK'])
         world_size = int(os.environ['WORLD_SIZE'])
@@ -18,17 +19,17 @@ def main(args):
         distributed.init_process_group('nccl', world_size=world_size, rank=rank)
         # distributed.init_process_group('gloo', world_size=self.world_size, rank=self.rank)
         torch.cuda.set_device(local_rank)
-    trainer = Trainer(args, local_rank=local_rank)
+    trainer = Trainer(args, local_rank=local_rank, world_size=world_size)
     if args.do_train:
+        init_logger(f'{args.log_dir}/train_{args.model}_{args.task}.log')
         trainer.train()
-
     else:
         if args.do_evaluate:
-            init_logger(f'{args.log_dir}/evaluate.log')
+            init_logger(f'{args.log_dir}/{args.model}_evaluate.log')
             trainer.load_model()
             trainer.evaluate()
         if args.do_test:
-            init_logger(f'{args.log_dir}/test.log')
+            init_logger(f'{args.log_dir}/{args.model}_test.log')
             trainer.load_model()
             trainer.test()
 
@@ -40,11 +41,11 @@ if __name__ == '__main__':
 
     global_group = parser.add_argument_group(title="global", description="")
     global_group.add_argument("--log_dir", default="./log_dir", type=str, help="")
-    global_group.add_argument("--task", default="multi30k_de_en", type=str, help="")
+    global_group.add_argument("--task", default="wmt14_de_en", type=str, help="")
     global_group.add_argument("--model", default="Transformer", type=str, help="")
 
     data_group = parser.add_argument_group(title="data", description="")
-    data_group.add_argument("--datasets", default='Multi30k', type=str, help="")
+    data_group.add_argument("--datasets", default='wmt14', type=str, help="")
     data_group.add_argument("--data_dir", default="./data", type=str, help="")
     data_group.add_argument("--src_language", default="de", type=str, help="")
     data_group.add_argument("--tgt_language", default="en", type=str, help="")
@@ -79,7 +80,7 @@ if __name__ == '__main__':
     evaluate_group = parser.add_argument_group(title="evaluate", description="")
     evaluate_group.add_argument("--do_evaluate", action="store_true", help="")
     evaluate_group.add_argument("--do_test", action="store_true", help="")
-    evaluate_group.add_argument("--evaluate_batch_size", default=128, type=int, help="")
+    evaluate_group.add_argument("--evaluate_batch_size", default=64, type=int, help="")
     evaluate_group.add_argument("--num_beams", default=5, type=int, help="")
     evaluate_group.add_argument("--alpha", default=0.6, type=float, help="length penalty")
 

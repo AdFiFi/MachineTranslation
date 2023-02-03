@@ -1,6 +1,6 @@
 #!/bin/bash
 cd ../
-python  main.py \
+torchrun  --nproc_per_node=4  main.py \
 --datasets "wmt14" \
 --log_dir "./log_dir" \
 --model "Transformer" \
@@ -21,9 +21,9 @@ python  main.py \
 \
 --do_train \
 --do_parallel \
---train_batch_size 128 \
+--train_batch_size 80 \
 --num_epochs 10 \
---learning_rate 1e-5 \
+--learning_rate 5e-5 \
 --beta1 0.9 \
 --beta2 0.98 \
 --epsilon 1e-9 \
@@ -34,10 +34,10 @@ python  main.py \
 --epsilon_ls 0.1 \
 \
 --do_evaluate \
---evaluate_batch_size 128 \
+--evaluate_batch_size 32 \
 --alpha 0.6
 
-python  main.py \
+torchrun  --nproc_per_node=4  main.py \
 --datasets "wmt14" \
 --log_dir "./log_dir" \
 --model "Stack" \
@@ -58,9 +58,9 @@ python  main.py \
 \
 --do_train \
 --do_parallel \
---train_batch_size 128 \
+--train_batch_size 80 \
 --num_epochs 10 \
---learning_rate 1e-5 \
+--learning_rate 5e-5 \
 --beta1 0.9 \
 --beta2 0.98 \
 --epsilon 1e-9 \
@@ -71,10 +71,10 @@ python  main.py \
 --epsilon_ls 0.1 \
 \
 --do_evaluate \
---evaluate_batch_size 128 \
+--evaluate_batch_size 32 \
 --alpha 0.6
 
-python  main.py \
+torchrun  --nproc_per_node=4  main.py \
 --datasets "wmt14" \
 --log_dir "./log_dir" \
 --model "Cube" \
@@ -95,9 +95,9 @@ python  main.py \
 \
 --do_train \
 --do_parallel \
---train_batch_size 128 \
+--train_batch_size 80 \
 --num_epochs 10 \
---learning_rate 1e-5 \
+--learning_rate 5e-5 \
 --beta1 0.9 \
 --beta2 0.98 \
 --epsilon 1e-9 \
@@ -108,5 +108,5 @@ python  main.py \
 --epsilon_ls 0.1 \
 \
 --do_evaluate \
---evaluate_batch_size 128 \
+--evaluate_batch_size 32 \
 --alpha 0.6

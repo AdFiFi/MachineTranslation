@@ -189,11 +189,17 @@ class Trainer(object):
                 enc_padding_mask, dec_padding_mask = create_mask(enc_ids, dec_ids, self.device)
 
                 if self.args.do_parallel:
-                    dec_ids, logits = self.model.module.beam_generate(enc_ids, enc_padding_mask, dec_ids,
-                                                                      num_beams=self.args.num_beams)
+                    if self.args.num_beams != 1:
+                        dec_ids, logits = self.model.module.beam_generate(enc_ids, enc_padding_mask, dec_ids,
+                                                                          num_beams=self.args.num_beams)
+                    else:
+                        dec_ids, logits = self.model.module.greedy_generate(enc_ids, enc_padding_mask, dec_ids)
                 else:
-                    dec_ids, logits = self.model.beam_generate(enc_ids, enc_padding_mask, dec_ids,
-                                                               num_beams=self.args.num_beams)
+                    if self.args.num_beams != 1:
+                        dec_ids, logits = self.model.beam_generate(enc_ids, enc_padding_mask, dec_ids,
+                                                                   num_beams=self.args.num_beams)
+                    else:
+                        dec_ids, logits = self.model.greedy_generate(enc_ids, enc_padding_mask, dec_ids)
                 # loss = self.loss_fn(logits.reshape(-1, logits.shape[-1]), tgt_out.reshape(-1))
                 # losses += loss.item()
                 # loss_list.append(loss.item())
@@ -221,14 +227,14 @@ class Trainer(object):
                 if mode == 'single':
                     break
 
-        blue = bleu_score(text_generation_corpus_list, text_target_corpus_list)
+        bleu = bleu_score(text_generation_corpus_list, text_target_corpus_list)
         if self.args.do_parallel:
-            blue = torch.tensor(blue).to(self.device)
-            dist.all_reduce(blue, op=dist.ReduceOp.SUM)
-            blue = float(blue) / self.world_size
+            bleu = torch.tensor(bleu).to(self.device)
+            dist.all_reduce(bleu, op=dist.ReduceOp.SUM)
+            bleu = float(bleu) / self.world_size
         results = {
             # "loss": losses / len(loss_list),
-            "BLUE": blue
+            "BLEU": bleu
         }
         logger.info(f"{results}")
         if mode == 'single':

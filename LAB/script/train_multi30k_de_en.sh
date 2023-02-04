@@ -15,8 +15,8 @@ torchrun  --nproc_per_node=4   main.py \
 --d_model 512 \
 --num_heads 8 \
 --dim_feedforward 2048 \
---num_encoder_layers 3 \
---num_decoder_layers 3 \
+--num_encoder_layers 6 \
+--num_decoder_layers 6 \
 --max_seq_len 128 \
 --activation 'gelu' \
 --model_dir 'output_dir' \
@@ -56,8 +56,8 @@ torchrun  --nproc_per_node=4   main.py \
 --d_model 512 \
 --num_heads 8 \
 --dim_feedforward 2048 \
---num_encoder_layers 3 \
---num_decoder_layers 3 \
+--num_encoder_layers 6 \
+--num_decoder_layers 6 \
 --max_seq_len 128 \
 --activation 'gelu' \
 --model_dir 'output_dir' \
@@ -97,8 +97,8 @@ torchrun  --nproc_per_node=4   main.py \
 --d_model 512 \
 --num_heads 8 \
 --dim_feedforward 2048 \
---num_encoder_layers 3 \
---num_decoder_layers 3 \
+--num_encoder_layers 6 \
+--num_decoder_layers 6 \
 --max_seq_len 128 \
 --activation 'gelu' \
 --model_dir 'output_dir' \
